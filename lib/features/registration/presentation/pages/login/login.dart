@@ -11,16 +11,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class Login extends StatelessWidget {
   const Login({super.key});
 
-  _goToHomePage(_, state) {
-    if (state is GetUserSuccessState) {
-      Navigator.pushNamedAndRemoveUntil(
-        _,
-        Routes.navigationRoute,
-        (route) => false,
-      );
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,7 +31,16 @@ class Login extends StatelessWidget {
           ],
         ),
       ),
-      bottomSheet: BlocBuilder<LoginCubit, LoginState>(
+      bottomSheet: BlocConsumer<LoginCubit, LoginState>(
+        listener: (context, state) {
+          if (state is GetUserSuccessState) {
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              Routes.navigationRoute,
+              (route) => false,
+            );
+          }
+        },
         builder: (context, state) {
           return ConditionalBuilder(
             condition: state is! LoadingGetUserState,
@@ -54,9 +53,7 @@ class Login extends StatelessWidget {
                         .formKey
                         .currentState!
                         .validate()
-                    ? BlocProvider.of<LoginCubit>(context)
-                        .userLogin()
-                        .then((value) => _goToHomePage(context, state))
+                    ? BlocProvider.of<LoginCubit>(context).userLogin()
                     : null,
               );
             },

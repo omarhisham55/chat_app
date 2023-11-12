@@ -25,7 +25,7 @@ class LoginCubit extends Cubit<LoginState> {
     emit(ChangeObscure(obscure));
   }
 
-  Future userLogin() async {
+  Future<void> userLogin() async {
     emit(LoadingGetUserState());
     Either<Failure, User> response = await getUserUsecase.call([
       emailController.text,
