@@ -11,15 +11,16 @@ class WelcomePage extends StatelessWidget {
   const WelcomePage({super.key});
 
   _goToSignUp(_) => Navigator.pushReplacementNamed(_, Routes.signUpRoute);
+  _goToNavigation(_) =>
+      Navigator.pushReplacementNamed(_, Routes.navigationRoute);
 
   @override
   Widget build(BuildContext context) {
-    bool isLoggedIn = false;
     return BlocConsumer<WelcomePageCubit, WelcomePageState>(
       listener: (context, state) {
         if (state is GetSavedUserSuccessState) {
           if (state.userModel is User) {
-            isLoggedIn = true;
+            _goToNavigation(context);
           }
         }
       },
@@ -27,7 +28,7 @@ class WelcomePage extends StatelessWidget {
         return ConditionalBuilder(
           condition: state is! LoadingGetSavedUserState,
           builder: (context) {
-            if (!isLoggedIn) {
+            if (state.props == ["No saved User"]) {
               return Scaffold(
                 body: _bodyContent(context),
                 bottomSheet: RoundedButton(

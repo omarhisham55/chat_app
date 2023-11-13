@@ -1,9 +1,13 @@
 import 'package:chat_app/core/utils/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 ThemeData lightTheme() => ThemeData(
       appBarTheme: AppBarTheme(
         backgroundColor: AppColors.lightThemePrimaryColor,
+        systemOverlayStyle: SystemUiOverlayStyle(
+          statusBarColor: AppColors.lightThemePrimaryColor,
+        ),
       ),
       textTheme: const TextTheme(
         displayMedium: TextStyle(

@@ -1,9 +1,10 @@
+import 'package:chat_app/core/utils/colors.dart';
 import 'package:flutter/material.dart';
 
 class NavigationTabbar extends StatefulWidget {
   final int length;
   final List<String> tabTitles;
-  final List<String> tabBodies;
+  final List<Widget> tabBodies;
   const NavigationTabbar({
     super.key,
     required this.length,
@@ -33,11 +34,32 @@ class _NavigationTabbarState extends State<NavigationTabbar>
 
   @override
   Widget build(BuildContext context) {
-    return TabBar(
-      tabs: List.generate(
-        widget.length,
-        (index) => Tab(
-          text: widget.tabTitles[index],
+    return Scaffold(
+      appBar: AppBar(
+        title: null,
+        leading: null,
+        actions: null,
+        toolbarHeight: 0,
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(kToolbarHeight),
+          child: TabBar(
+            controller: _tabController,
+            indicatorColor: AppColors.whiteBackgroundColor,
+            indicatorWeight: 4,
+            tabs: List.generate(
+              widget.length,
+              (index) => Tab(
+                text: widget.tabTitles[index],
+              ),
+            ),
+          ),
+        ),
+      ),
+      body: TabBarView(
+        controller: _tabController,
+        children: List.generate(
+          widget.length,
+          (index) => widget.tabBodies[index],
         ),
       ),
     );
