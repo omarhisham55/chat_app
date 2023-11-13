@@ -9,21 +9,24 @@ ThemeData lightTheme() => ThemeData(
           statusBarColor: AppColors.lightThemePrimaryColor,
         ),
       ),
-      textTheme: const TextTheme(
-        displayMedium: TextStyle(
+      textTheme: TextTheme(
+        displayMedium: const TextStyle(
           color: Colors.black,
           fontWeight: FontWeight.w500,
         ),
-        titleLarge: TextStyle(
+        titleLarge: const TextStyle(
           color: AppColors.whiteBackgroundColor,
         ),
-        titleSmall: TextStyle(
+        titleMedium: TextStyle(
+          color: AppColors.shadedColor,
+        ),
+        titleSmall: const TextStyle(
           color: AppColors.whiteBackgroundColor,
         ),
-        headlineLarge: TextStyle(
+        headlineLarge: const TextStyle(
           color: Colors.black,
         ),
-        headlineMedium: TextStyle(
+        headlineMedium: const TextStyle(
           color: Colors.black,
         ),
       ),

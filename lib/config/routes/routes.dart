@@ -5,6 +5,8 @@ import 'package:chat_app/features/registration/presentation/pages/login/login.da
 import 'package:chat_app/features/registration/presentation/pages/sign_up/otp_verification.dart';
 import 'package:chat_app/features/registration/presentation/pages/sign_up/phone_sign_up.dart';
 import 'package:chat_app/features/registration/presentation/pages/sign_up/sign_up.dart';
+import 'package:chat_app/features/settings/presentation/pages/setting_details_pages/setting_details_page.dart';
+import 'package:chat_app/features/settings/presentation/pages/settings.dart';
 import 'package:chat_app/features/welcome_page/presentation/pages/welcome_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,6 +19,8 @@ class Routes {
   static const String otpVerificationRoute = "/otpVerificationRoute";
   static const String loginRoute = "/login";
   static const String navigationRoute = "/navigation";
+  static const String settingsRoute = "/settings";
+  static const String settingsDetailsRoute = "/settingsDetails";
 
   Routes._();
   factory Routes() => Routes._();
@@ -48,6 +52,16 @@ class Routes {
           ),
       navigationRoute: (settings) => MaterialPageRoute(
             builder: (context) => const NavigationPage(),
+            settings: settings,
+          ),
+      settingsRoute: (settings) => MaterialPageRoute(
+            builder: (context) => Settings(),
+            settings: settings,
+          ),
+      settingsDetailsRoute: (settings) => MaterialPageRoute(
+            builder: (context) => SettingDetailPage(
+              title: settings.arguments as String,
+            ),
             settings: settings,
           ),
     };

@@ -1,6 +1,7 @@
 import 'package:chat_app/core/firebase/firebase_consumer/firebase_consumer.dart';
 import 'package:chat_app/core/network/network_info.dart';
 import 'package:chat_app/features/registration/registration_injection.dart';
+import 'package:chat_app/features/settings/settings_injection.dart';
 import 'package:chat_app/features/welcome_page/presentation/cubit/welcome_page_cubit.dart';
 import 'package:chat_app/firebase_options.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -44,4 +45,5 @@ Future<void> init() async {
     () => WelcomePageCubit(getSavedUserUsecase: injection()),
   );
   registrationInjection();
+  settingsInjection();
 }

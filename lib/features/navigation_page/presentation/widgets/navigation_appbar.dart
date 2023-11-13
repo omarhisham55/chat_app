@@ -46,7 +46,7 @@ SliverAppBar navigationAppbar(context) {
         onSelected: (String value) => Navigator.pushNamed(
           context,
           switch (value) {
-            "Settings" => Routes.initialRoute,
+            "Settings" => Routes.settingsRoute,
             String() => null,
           }!,
         ),
