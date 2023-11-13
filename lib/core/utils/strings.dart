@@ -11,6 +11,12 @@ class AppStrings {
 
 class SettingStrings {
   static const String settingTitle = "Settings";
+  static const List<String> settingsNavigationAppbar = [
+    "New group",
+    "Linked devices",
+    "Starred messages",
+    "Settings",
+  ];
   static const Map<String, String> settingContent = {
     "Account": "Security notifications, change number",
     "Privacy": "Block contacts, disappearing messages",

@@ -4,24 +4,17 @@ import 'package:flutter/material.dart';
 
 SliverAppBar navigationAppbar(context) {
   List<PopupMenuEntry<String>> popUpMenuEntries =
-      const <PopupMenuEntry<String>>[
-    PopupMenuItem<String>(
-      value: 'New group',
-      child: Text('New group'),
-    ),
-    PopupMenuItem<String>(
-      value: 'Linked devices',
-      child: Text('Linked devices'),
-    ),
-    PopupMenuItem<String>(
-      value: 'Starred messages',
-      child: Text('Starred messages'),
-    ),
-    PopupMenuItem<String>(
-      value: 'Settings',
-      child: Text('Settings'),
-    ),
-  ];
+      SettingStrings.settingsNavigationAppbar
+          .map(
+            (value) => PopupMenuItem<String>(
+              value: value,
+              child: Text(
+                value,
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+            ),
+          )
+          .toList();
   return SliverAppBar(
     title: Text(
       AppStrings.appTitle,

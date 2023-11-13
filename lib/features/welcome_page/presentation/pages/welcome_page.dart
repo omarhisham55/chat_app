@@ -1,6 +1,5 @@
 import 'package:chat_app/config/routes/routes.dart';
 import 'package:chat_app/core/widgets/buttons.dart';
-import 'package:chat_app/features/navigation_page/presentation/pages/navigation_page.dart';
 import 'package:chat_app/features/registration/domain/entities/user.dart';
 import 'package:chat_app/features/welcome_page/presentation/cubit/welcome_page_cubit.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
@@ -26,21 +25,17 @@ class WelcomePage extends StatelessWidget {
       },
       builder: (context, state) {
         return ConditionalBuilder(
-          condition: state is! LoadingGetSavedUserState,
+          condition: state is! LoadingGetSavedUserState || state.props is! User,
           builder: (context) {
-            if (state.props == ["No saved User"]) {
-              return Scaffold(
-                body: _bodyContent(context),
-                bottomSheet: RoundedButton(
-                  text: "Get Started",
-                  textPadding: const EdgeInsets.symmetric(vertical: 15),
-                  buttonPadding: const EdgeInsets.all(10),
-                  onPressed: () => _goToSignUp(context),
-                ),
-              );
-            } else {
-              return const NavigationPage();
-            }
+            return Scaffold(
+              body: _bodyContent(context),
+              bottomSheet: RoundedButton(
+                text: "Get Started",
+                textPadding: const EdgeInsets.symmetric(vertical: 15),
+                buttonPadding: const EdgeInsets.all(10),
+                onPressed: () => _goToSignUp(context),
+              ),
+            );
           },
           fallback: (context) => const Center(
             child: CircularProgressIndicator(),
