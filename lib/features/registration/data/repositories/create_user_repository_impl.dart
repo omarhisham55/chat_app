@@ -16,19 +16,51 @@ class CreateUserRepositoryImpl implements CreateUserRepository {
   });
 
   @override
-  Future<Either<Failure, UserCredential>> createUser({
+  Future<Either<Failure, UserCredential>> createUserByEmail({
     required String username,
     required String email,
     required String password,
   }) async {
     if (await network.isConnected) {
       try {
-        final createUser = await createUserRemoteDataSource.createUser(
+        final createUser = await createUserRemoteDataSource.createUserByEmail(
           username: username,
           email: email,
           password: password,
         );
         return Right(createUser);
+      } on ServerException {
+        return Left(ServerFailure());
+      }
+    } else {
+      return Left(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> createUserByPhoneNumber(
+      {required String phoneNumber}) async {
+    if (await network.isConnected) {
+      try {
+        final createUser = await createUserRemoteDataSource
+            .createUserByPhoneNumber(phoneNumber: phoneNumber);
+        return Right(createUser);
+      } on ServerException {
+        return Left(ServerFailure());
+      }
+    } else {
+      return Left(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, dynamic>> sendSmsCode(
+      {required String smsCode}) async {
+    if (await network.isConnected) {
+      try {
+        final sendCode =
+            await createUserRemoteDataSource.sendSmsCode(smsCode: smsCode);
+        return Right(sendCode);
       } on ServerException {
         return Left(ServerFailure());
       }

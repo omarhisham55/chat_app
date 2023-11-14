@@ -10,7 +10,10 @@ class FirebaseConsumer implements FirebaseAuthentication {
   final FirebaseAuth client;
   final FirebaseFirestore firebsaeData;
 
-  const FirebaseConsumer({required this.client, required this.firebsaeData});
+  const FirebaseConsumer({
+    required this.client,
+    required this.firebsaeData,
+  });
 
   @override
   Future<UserCredential> emailAuthentication({
@@ -62,6 +65,38 @@ class FirebaseConsumer implements FirebaseAuthentication {
     }
   }
 
+  static String? _verifyId;
+  @override
+  Future<void> phoneNumberAuthentication({required String phoneNumber}) async {
+    try {
+      await client.verifyPhoneNumber(
+        phoneNumber: "+2$phoneNumber",
+        timeout: const Duration(seconds: 60),
+        verificationCompleted: (PhoneAuthCredential phoneAuthCredential) async {
+          await client.signInWithCredential(phoneAuthCredential);
+        },
+        verificationFailed: (FirebaseAuthException error) {
+          _handleFirebaseException(error);
+        },
+        codeSent: (String verificationId, int? forceResendingToken) async {
+          _verifyId = verificationId;
+        },
+        codeAutoRetrievalTimeout: (String verificationId) {},
+      );
+    } on FirebaseAuthException catch (error) {
+      return Future.error(_handleFirebaseException(error));
+    }
+  }
+
+  @override
+  sendSmsCode({required String smsCode}) async {
+    PhoneAuthCredential credential = PhoneAuthProvider.credential(
+      verificationId: _verifyId!,
+      smsCode: smsCode,
+    );
+    await client.signInWithCredential(credential);
+  }
+
   dynamic _handleFirebaseException(FirebaseAuthException error) {
     switch (error.code) {
       case "INVALID_LOGIN_CREDENTIALS":
@@ -94,6 +129,12 @@ class FirebaseConsumer implements FirebaseAuthentication {
           color: Colors.red,
         );
         throw const EmailInUse();
+      case "invalid-phone-number":
+        Constants.showToast(
+          msg: const InvalidPhoneNumber().msg!,
+          color: Colors.red,
+        );
+        throw const InvalidPhoneNumber();
     }
   }
 }

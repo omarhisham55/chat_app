@@ -1,6 +1,7 @@
 import 'package:chat_app/core/widgets/text_form_field.dart';
 import 'package:chat_app/features/registration/presentation/cubit/sign_up/sign_up_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:chat_app/injection_container.dart' as di;
 
@@ -77,11 +78,12 @@ class PhoneSignUpForm extends StatelessWidget {
         controller: BlocProvider.of<SignUpCubit>(context).numberController,
         keyboardType: TextInputType.number,
         validator: (value) {
-          if(value!.isEmpty){
+          if (value!.isEmpty) {
             return "Enter valid phone number";
           }
           return null;
         },
+        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
       ),
     );
   }

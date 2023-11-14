@@ -13,14 +13,23 @@ import 'package:chat_app/injection_container.dart';
 Future<void> registrationInjection() async {
   //bloc
   injection.registerFactory(
-    () => SignUpCubit(createUser: injection()),
+    () => SignUpCubit(
+        createUserByEmail: injection(),
+        createUserByPhoneNumber: injection(),
+        sendSmsUseCase: injection()),
   );
   injection.registerFactory(
     () => LoginCubit(getUserUsecase: injection()),
   );
   //usecases
   injection.registerLazySingleton(
-    () => CreateUser(createUserRepository: injection()),
+    () => CreateUserByEmailUseCase(createUserRepository: injection()),
+  );
+  injection.registerLazySingleton(
+    () => CreateUserByPhoneNumberUseCase(createUserRepository: injection()),
+  );
+  injection.registerLazySingleton(
+    () => SendSmsUseCase(createUserRepository: injection()),
   );
   injection.registerLazySingleton(
     () => GetUserUsecase(getUserRepository: injection()),

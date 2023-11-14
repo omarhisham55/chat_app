@@ -31,3 +31,7 @@ class InvalidEmailFormat extends ServerException {
 class EmailInUse extends ServerException {
   const EmailInUse([msg]) : super("Email already has an account");
 }
+
+class InvalidPhoneNumber extends ServerException {
+  const InvalidPhoneNumber([msg]) : super("Invalid phone number");
+}

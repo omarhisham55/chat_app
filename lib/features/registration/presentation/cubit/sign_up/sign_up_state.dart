@@ -36,3 +36,22 @@ class CreateUserErrorState extends SignUpState {
   @override
   List<Object> get props => [msg];
 }
+
+class PhoneAuthenticationSuccessState extends SignUpState {
+  @override
+  List<Object> get props => ["phone authenticated"];
+}
+
+class PhoneAuthenticationErrorState extends SignUpState {
+  @override
+  List<Object> get props => ["phone not authenticated"];
+}
+class CodeVerifiedState extends SignUpState {
+  @override
+  List<Object> get props => ["code verified"];
+}
+
+class CodeNotVerifiedState extends SignUpState {
+  @override
+  List<Object> get props => ["code not verified"];
+}

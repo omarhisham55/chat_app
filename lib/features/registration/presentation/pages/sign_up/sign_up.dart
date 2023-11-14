@@ -65,7 +65,7 @@ class SignUpPage extends StatelessWidget {
                         .currentState!
                         .validate()
                     ? BlocProvider.of<SignUpCubit>(context)
-                        .createUserAccount()
+                        .createUserAccountByEmail()
                         .then((value) =>
                             _goToLoginAfterAccountCreated(context, state))
                     : null,

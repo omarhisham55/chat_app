@@ -8,8 +8,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 part 'sign_up_state.dart';
 
 class SignUpCubit extends Cubit<SignUpState> {
-  final CreateUser createUser;
-  SignUpCubit({required this.createUser}) : super(SignUpInitial());
+  final CreateUserByEmailUseCase createUserByEmail;
+  final CreateUserByPhoneNumberUseCase createUserByPhoneNumber;
+  final SendSmsUseCase sendSmsUseCase;
+  SignUpCubit({
+    required this.createUserByEmail,
+    required this.createUserByPhoneNumber,
+    required this.sendSmsUseCase,
+  }) : super(SignUpInitial());
 
   SignUpCubit get(context) => BlocProvider.of<SignUpCubit>(context);
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -29,9 +35,9 @@ class SignUpCubit extends Cubit<SignUpState> {
     emit(ChangeObscure(obscure));
   }
 
-  Future<void> createUserAccount() async {
+  Future<void> createUserAccountByEmail() async {
     emit(LoadingCreateUserState());
-    Either<Failure, dynamic> response = await createUser.call([
+    Either<Failure, dynamic> response = await createUserByEmail.call([
       usernameController.text,
       emailController.text,
       passwordController.text,
@@ -44,6 +50,37 @@ class SignUpCubit extends Cubit<SignUpState> {
         (created) => const CreateUserSuccessState(
           userModel: "create user success",
         ),
+      ),
+    );
+  }
+
+  int counter = 60;
+  resendCode(Function() timer) {
+    counter = 60;
+    timer();
+  }
+
+  Future<void> createUserAccountByPhoneNumber() async {
+    final Either<Failure, void> response =
+        await createUserByPhoneNumber.call(numberController.text);
+    emit(
+      response.fold(
+        (failure) => PhoneAuthenticationErrorState(),
+        (success) => PhoneAuthenticationSuccessState(),
+      ),
+    );
+  }
+
+  Future sendSmsCode() async {
+    String otp = "";
+    for (TextEditingController value in otps) {
+      otp += value.text;
+    }
+    final Either<Failure, dynamic> sms = await sendSmsUseCase.call(otp);
+    emit(
+      sms.fold(
+        (l) => CodeNotVerifiedState(),
+        (r) => CodeVerifiedState(),
       ),
     );
   }

@@ -7,6 +7,8 @@ abstract class FirebaseAuthentication {
     required String email,
     required String password,
   });
+  Future<void> phoneNumberAuthentication({required String phoneNumber});
+  sendSmsCode({required String smsCode});
   Future<DocumentSnapshot<Map<String, dynamic>>> loginWithEmailAndPassword({
     required String email,
     required String password,
