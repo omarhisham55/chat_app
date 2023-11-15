@@ -35,3 +35,11 @@ class EmailInUse extends ServerException {
 class InvalidPhoneNumber extends ServerException {
   const InvalidPhoneNumber([msg]) : super("Invalid phone number");
 }
+
+class TooManyRequests extends ServerException {
+  const TooManyRequests([msg]) : super("Too many requests. Try again later");
+}
+
+class UnknownError extends ServerException {
+  const UnknownError([msg]) : super("Unknown error $msg");
+}

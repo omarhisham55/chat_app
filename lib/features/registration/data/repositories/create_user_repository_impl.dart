@@ -38,13 +38,13 @@ class CreateUserRepositoryImpl implements CreateUserRepository {
   }
 
   @override
-  Future<Either<Failure, void>> createUserByPhoneNumber(
+  Future<Either<Failure, bool>> createUserByPhoneNumber(
       {required String phoneNumber}) async {
     if (await network.isConnected) {
       try {
         final createUser = await createUserRemoteDataSource
             .createUserByPhoneNumber(phoneNumber: phoneNumber);
-        return Right(createUser);
+        return createUser ? Right(createUser) : Left(ServerFailure());
       } on ServerException {
         return Left(ServerFailure());
       }

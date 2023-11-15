@@ -67,7 +67,7 @@ class FirebaseConsumer implements FirebaseAuthentication {
 
   static String? _verifyId;
   @override
-  Future<void> phoneNumberAuthentication({required String phoneNumber}) async {
+  Future<bool> phoneNumberAuthentication({required String phoneNumber}) async {
     try {
       await client.verifyPhoneNumber(
         phoneNumber: "+2$phoneNumber",
@@ -77,24 +77,36 @@ class FirebaseConsumer implements FirebaseAuthentication {
         },
         verificationFailed: (FirebaseAuthException error) {
           _handleFirebaseException(error);
+          debugPrint("zaza ${error.code}");
         },
         codeSent: (String verificationId, int? forceResendingToken) async {
           _verifyId = verificationId;
         },
         codeAutoRetrievalTimeout: (String verificationId) {},
       );
+      return true;
     } on FirebaseAuthException catch (error) {
-      return Future.error(_handleFirebaseException(error));
+      _handleFirebaseException(error);
+      debugPrint("hamo ${error.code}");
+      return false;
     }
   }
 
   @override
-  sendSmsCode({required String smsCode}) async {
+  Future<UserCredential> sendSmsCode({required String smsCode}) async {
     PhoneAuthCredential credential = PhoneAuthProvider.credential(
       verificationId: _verifyId!,
       smsCode: smsCode,
     );
-    await client.signInWithCredential(credential);
+    final response = await client.signInWithCredential(credential);
+    await _saveCreatedUser(
+      UserModel(
+        id: response.user!.uid,
+        username: response.user!.phoneNumber!,
+        phoneNumber: response.user!.phoneNumber,
+      ),
+    );
+    return response;
   }
 
   dynamic _handleFirebaseException(FirebaseAuthException error) {
@@ -134,7 +146,17 @@ class FirebaseConsumer implements FirebaseAuthentication {
           msg: const InvalidPhoneNumber().msg!,
           color: Colors.red,
         );
-        throw const InvalidPhoneNumber();
+      case "too-many-requests":
+        Constants.showToast(
+          msg: const TooManyRequests().msg!,
+          color: Colors.red,
+        );
+      default:
+        Constants.showToast(
+          msg: UnknownError(error.code).msg!,
+          color: Colors.red,
+        );
+        throw const UnknownError();
     }
   }
 }

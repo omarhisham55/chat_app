@@ -19,6 +19,7 @@ class LoginForm extends StatelessWidget {
               ChatTextFormField(
                 label: "Email",
                 controller: get.emailController,
+                keyboardType: TextInputType.emailAddress,
                 validator: (value) {
                   if (!value!.contains("@") || !value.contains(".com")) {
                     return "Enter valid email";

@@ -21,7 +21,6 @@ class _OTPVerificationState extends State<OTPVerification> {
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<SignUpCubit>(context).createUserAccountByPhoneNumber();
     _startTimer();
   }
 

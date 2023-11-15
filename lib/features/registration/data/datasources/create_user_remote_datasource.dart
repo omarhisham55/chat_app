@@ -7,8 +7,8 @@ abstract class CreateUserRemoteDataSource {
     required String email,
     required String password,
   });
-  Future<void> createUserByPhoneNumber({required String phoneNumber});
-  Future sendSmsCode({required String smsCode});
+  Future<bool> createUserByPhoneNumber({required String phoneNumber});
+  Future<UserCredential> sendSmsCode({required String smsCode});
 }
 
 class CreateUserRemoteDataSourceImpl implements CreateUserRemoteDataSource {
@@ -29,12 +29,12 @@ class CreateUserRemoteDataSourceImpl implements CreateUserRemoteDataSource {
   }
 
   @override
-  Future<void> createUserByPhoneNumber({required String phoneNumber}) async {
-    await firebaseConsumer.phoneNumberAuthentication(phoneNumber: phoneNumber);
+  Future<bool> createUserByPhoneNumber({required String phoneNumber}) async {
+    return await firebaseConsumer.phoneNumberAuthentication(phoneNumber: phoneNumber);
   }
 
   @override
-  Future sendSmsCode({required String smsCode}) async {
-    await firebaseConsumer.sendSmsCode(smsCode: smsCode);
+  Future<UserCredential> sendSmsCode({required String smsCode}) async {
+    return await firebaseConsumer.sendSmsCode(smsCode: smsCode);
   }
 }

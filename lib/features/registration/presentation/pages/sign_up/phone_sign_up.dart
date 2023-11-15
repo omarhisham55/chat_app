@@ -30,10 +30,8 @@ class PhoneSignUp extends StatelessWidget {
                       .phoneFormKey
                       .currentState!
                       .validate()
-                  ? Navigator.pushNamed(
-                      context,
-                      Routes.otpVerificationRoute,
-                    )
+                  ? BlocProvider.of<SignUpCubit>(context)
+                      .createUserAccountByPhoneNumber()
                   : null,
             ),
           ],

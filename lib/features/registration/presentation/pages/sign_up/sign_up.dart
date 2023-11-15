@@ -12,12 +12,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class SignUpPage extends StatelessWidget {
   const SignUpPage({super.key});
 
-  _goToLoginAfterAccountCreated(_, state) {
-    if (state is CreateUserSuccessState) {
-      _goToLogin(_);
-    }
-  }
-
   _goToLogin(_) => Navigator.pushNamed(_, Routes.loginRoute);
 
   @override
@@ -51,7 +45,12 @@ class SignUpPage extends StatelessWidget {
           ),
         ),
       ),
-      bottomSheet: BlocBuilder<SignUpCubit, SignUpState>(
+      bottomSheet: BlocConsumer<SignUpCubit, SignUpState>(
+        listener: (context, state) {
+          if(state is CreateUserSuccessState){
+            _goToLogin(context);
+          }
+        },
         builder: (context, state) {
           return ConditionalBuilder(
             condition: state is! LoadingCreateUserState,
@@ -66,8 +65,6 @@ class SignUpPage extends StatelessWidget {
                         .validate()
                     ? BlocProvider.of<SignUpCubit>(context)
                         .createUserAccountByEmail()
-                        .then((value) =>
-                            _goToLoginAfterAccountCreated(context, state))
                     : null,
               );
             },
