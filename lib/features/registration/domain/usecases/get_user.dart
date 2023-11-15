@@ -24,3 +24,13 @@ class GetSavedUserUsecase implements UseCase<User?, NoParams> {
     return getUserRepository.getCachedUser();
   }
 }
+
+class GetAllUsersUsecase implements UseCase<List<User>, NoParams> {
+  final GetAllUsersReopsitory getAllUsersReopsitory;
+
+  GetAllUsersUsecase({required this.getAllUsersReopsitory});
+  @override
+  Future<Either<Failure, List<User>>> call(NoParams params) {
+    return getAllUsersReopsitory.getAllUsers();
+  }
+}

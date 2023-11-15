@@ -9,3 +9,7 @@ abstract class GetUserRepository {
   });
   Future<Either<Failure, User?>> getCachedUser();
 }
+
+abstract class GetAllUsersReopsitory {
+  Future<Either<Failure, List<User>>> getAllUsers();
+}

@@ -28,3 +28,23 @@ class GetSavedUserErrorState extends WelcomePageState {
   @override
   List<Object> get props => [msg];
 }
+
+class LoadingGetAllUsersState extends WelcomePageState {}
+
+class GetAllUsersSuccessState extends WelcomePageState {
+  final List<User>? userModel;
+
+  const GetAllUsersSuccessState({required this.userModel});
+
+  @override
+  List<Object> get props => [userModel ?? "No User found"];
+}
+
+class GetAllUsersErrorState extends WelcomePageState {
+  final String msg;
+
+  const GetAllUsersErrorState({required this.msg});
+
+  @override
+  List<Object> get props => [msg];
+}

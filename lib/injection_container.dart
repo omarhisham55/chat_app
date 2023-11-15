@@ -42,7 +42,10 @@ Future<void> init() async {
 
   //features
   injection.registerFactory(
-    () => WelcomePageCubit(getSavedUserUsecase: injection()),
+    () => WelcomePageCubit(
+      getSavedUserUsecase: injection(),
+      getAllUsersUsecase: injection(),
+    ),
   );
   registrationInjection();
   settingsInjection();

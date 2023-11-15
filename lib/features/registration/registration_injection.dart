@@ -37,6 +37,9 @@ Future<void> registrationInjection() async {
   injection.registerLazySingleton(
     () => GetSavedUserUsecase(getUserRepository: injection()),
   );
+  injection.registerLazySingleton(
+    () => GetAllUsersUsecase(getAllUsersReopsitory: injection()),
+  );
   //repository
   injection.registerLazySingleton<CreateUserRepository>(
     () => CreateUserRepositoryImpl(
@@ -50,12 +53,24 @@ Future<void> registrationInjection() async {
       getUserDatasource: injection(),
     ),
   );
+  injection.registerLazySingleton<GetAllUsersReopsitory>(
+    () => GetAllUsersReopsitoryImp(
+      network: injection(),
+      getAllUsersDataSource: injection(),
+    ),
+  );
   //datasource
   injection.registerLazySingleton<CreateUserRemoteDataSource>(
     () => CreateUserRemoteDataSourceImpl(firebaseConsumer: injection()),
   );
   injection.registerLazySingleton<GetUserDatasource>(
     () => GetUserDatasourceImpl(
+      firebaseConsumer: injection(),
+      sharedPreferences: injection(),
+    ),
+  );
+  injection.registerLazySingleton<GetAllUsersDataSource>(
+    () => GetAllUsersDataSourceImp(
       firebaseConsumer: injection(),
       sharedPreferences: injection(),
     ),

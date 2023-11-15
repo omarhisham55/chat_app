@@ -109,6 +109,10 @@ class FirebaseConsumer implements FirebaseAuthentication {
     return response;
   }
 
+  Future<QuerySnapshot<Map<String, dynamic>>> getAllUsers() async {
+    return await firebsaeData.collection("users").get();
+  }
+
   dynamic _handleFirebaseException(FirebaseAuthException error) {
     switch (error.code) {
       case "INVALID_LOGIN_CREDENTIALS":

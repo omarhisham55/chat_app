@@ -45,3 +45,18 @@ class GetUserRepositoryImpl implements GetUserRepository {
     }
   }
 }
+
+class GetAllUsersReopsitoryImp extends GetAllUsersReopsitory {
+  final NetworkInfo network;
+  final GetAllUsersDataSource getAllUsersDataSource;
+
+  GetAllUsersReopsitoryImp({required this.network, required this.getAllUsersDataSource});
+  @override
+  Future<Either<Failure, List<User>>> getAllUsers() async {
+    try {
+      return Right(await getAllUsersDataSource.getAllUsers());
+    } on ServerException {
+      return Left(ServerFailure());
+    }
+  }
+}
