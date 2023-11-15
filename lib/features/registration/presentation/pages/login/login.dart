@@ -4,6 +4,7 @@ import 'package:chat_app/core/widgets/indicator.dart';
 import 'package:chat_app/features/registration/presentation/cubit/login/login_cubit.dart';
 import 'package:chat_app/features/registration/presentation/widgets/login_widgets/login_form.dart';
 import 'package:chat_app/features/registration/presentation/widgets/toggle_registration.dart';
+import 'package:chat_app/features/welcome_page/presentation/cubit/welcome_page_cubit.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -53,7 +54,10 @@ class Login extends StatelessWidget {
                         .formKey
                         .currentState!
                         .validate()
-                    ? BlocProvider.of<LoginCubit>(context).userLogin()
+                    ? BlocProvider.of<LoginCubit>(context).userLogin().then(
+                          (value) => BlocProvider.of<WelcomePageCubit>(context)
+                              .getSavedUser(),
+                        )
                     : null,
               );
             },
