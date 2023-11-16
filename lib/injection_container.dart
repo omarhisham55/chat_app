@@ -1,5 +1,7 @@
+import 'package:chat_app/core/firebase/firebase_auth/firebase_messaging.dart';
 import 'package:chat_app/core/firebase/firebase_consumer/firebase_consumer.dart';
 import 'package:chat_app/core/network/network_info.dart';
+import 'package:chat_app/features/chat_page/chat_injection.dart';
 import 'package:chat_app/features/registration/registration_injection.dart';
 import 'package:chat_app/features/settings/settings_injection.dart';
 import 'package:chat_app/features/welcome_page/presentation/cubit/welcome_page_cubit.dart';
@@ -24,10 +26,15 @@ Future<void> init() async {
   injection.registerLazySingleton<FirebaseFirestore>(
     () => FirebaseFirestore.instance,
   );
-  injection.registerLazySingleton<FirebaseConsumer>(
-    () => FirebaseConsumer(
+  injection.registerLazySingleton<FirebaseAuthConsumer>(
+    () => FirebaseAuthConsumer(
       client: injection(),
       firebsaeData: injection(),
+    ),
+  );
+  injection.registerLazySingleton<FirebaseConsumer>(
+    () => FirebaseConsumer(
+      firebaseFirestore: injection(),
     ),
   );
 
@@ -49,4 +56,5 @@ Future<void> init() async {
   );
   registrationInjection();
   settingsInjection();
+  chatInjection();
 }

@@ -1,16 +1,18 @@
 import 'package:chat_app/core/error/exception.dart';
 import 'package:chat_app/core/firebase/firebase_auth/firebase_auth.dart';
+import 'package:chat_app/core/firebase/firebase_auth/firebase_messaging.dart';
 import 'package:chat_app/core/utils/constants.dart';
+import 'package:chat_app/features/chat_page/data/models/chat_model.dart';
 import 'package:chat_app/features/registration/data/models/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class FirebaseConsumer implements FirebaseAuthentication {
+class FirebaseAuthConsumer implements FirebaseAuthentication {
   final FirebaseAuth client;
   final FirebaseFirestore firebsaeData;
 
-  const FirebaseConsumer({
+  const FirebaseAuthConsumer({
     required this.client,
     required this.firebsaeData,
   });
@@ -161,6 +163,46 @@ class FirebaseConsumer implements FirebaseAuthentication {
           color: Colors.red,
         );
         throw const UnknownError();
+    }
+  }
+}
+
+class FirebaseConsumer implements FirebaseMessaging {
+  final FirebaseFirestore firebaseFirestore;
+
+  FirebaseConsumer({required this.firebaseFirestore});
+  @override
+  Future<void> sendMessages({
+    required String senderId,
+    required String receiverId,
+    required String dateTime,
+    required String message,
+  }) async {
+    try {
+      final ChatModel model = ChatModel(
+        senderId: senderId,
+        receiverId: receiverId,
+        dateTime: dateTime,
+        message: message,
+      );
+      //set main user chat
+      await firebaseFirestore
+          .collection("users")
+          .doc(senderId)
+          .collection("chats")
+          .doc(receiverId)
+          .collection("messages")
+          .add(model.toMap());
+      //set other user chat
+      await firebaseFirestore
+          .collection("users")
+          .doc(receiverId)
+          .collection("chats")
+          .doc(senderId)
+          .collection("messages")
+          .add(model.toMap());
+    } catch (error) {
+      debugPrint(error.toString());
     }
   }
 }

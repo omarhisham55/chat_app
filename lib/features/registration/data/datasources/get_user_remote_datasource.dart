@@ -17,7 +17,7 @@ abstract class GetAllUsersDataSource {
 }
 
 class GetUserDatasourceImpl implements GetUserDatasource {
-  final FirebaseConsumer firebaseConsumer;
+  final FirebaseAuthConsumer firebaseConsumer;
   final SharedPreferences sharedPreferences;
 
   GetUserDatasourceImpl(
@@ -50,7 +50,7 @@ class GetUserDatasourceImpl implements GetUserDatasource {
 }
 
 class GetAllUsersDataSourceImp implements GetAllUsersDataSource {
-  final FirebaseConsumer firebaseConsumer;
+  final FirebaseAuthConsumer firebaseConsumer;
   final SharedPreferences sharedPreferences;
   List<UserModel> users = [];
 

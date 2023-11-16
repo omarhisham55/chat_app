@@ -8,3 +8,19 @@ abstract class ChatPageState extends Equatable {
 }
 
 class ChatPageInitial extends ChatPageState {}
+
+class SendChatSuccess extends ChatPageState {
+  final String msg;
+  const SendChatSuccess(this.msg);
+
+  @override
+  List<Object> get props => [msg];
+}
+
+class SendChatFailed extends ChatPageState {
+  final String msg;
+  const SendChatFailed({this.msg = "message failed to send"});
+
+  @override
+  List<Object> get props => [msg];
+}

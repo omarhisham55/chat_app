@@ -1,6 +1,9 @@
+import 'package:chat_app/core/widgets/text_form_field.dart';
+import 'package:chat_app/features/chat_page/presentation/cubit/chat_page_cubit.dart';
 import 'package:chat_app/features/chat_page/presentation/widgets/chat_bubble.dart';
 import 'package:chat_app/features/registration/domain/entities/user.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class IntoChat extends StatelessWidget {
   final User otherUser;
@@ -40,6 +43,7 @@ class IntoChat extends StatelessWidget {
         ],
       ),
       body: _buildBody(context),
+      bottomSheet: _typeMessage(context),
     );
   }
 
@@ -50,5 +54,9 @@ class IntoChat extends StatelessWidget {
             OtherBubbleChat(),
           ],
         ),
+      );
+
+  Widget _typeMessage(context) => MessagesTextField(
+        controller: BlocProvider.of<ChatPageCubit>(context).messageController,
       );
 }

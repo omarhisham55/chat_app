@@ -12,7 +12,7 @@ abstract class CreateUserRemoteDataSource {
 }
 
 class CreateUserRemoteDataSourceImpl implements CreateUserRemoteDataSource {
-  final FirebaseConsumer firebaseConsumer;
+  final FirebaseAuthConsumer firebaseConsumer;
 
   CreateUserRemoteDataSourceImpl({required this.firebaseConsumer});
   @override

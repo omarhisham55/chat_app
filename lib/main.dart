@@ -2,6 +2,7 @@ import 'package:chat_app/bloc_observer.dart';
 import 'package:chat_app/config/routes/routes.dart';
 import 'package:chat_app/config/theme/themes.dart';
 import 'package:chat_app/core/utils/strings.dart';
+import 'package:chat_app/features/chat_page/presentation/cubit/chat_page_cubit.dart';
 import 'package:chat_app/features/registration/presentation/cubit/sign_up/sign_up_cubit.dart';
 import 'package:chat_app/features/welcome_page/presentation/cubit/welcome_page_cubit.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +27,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => di.injection<WelcomePageCubit>()..getAllUsers()..getSavedUser(),
         ),
+        BlocProvider(create: (context) => di.injection<ChatPageCubit>()),
       ],
       child: MaterialApp(
         title: AppStrings.appTitle,

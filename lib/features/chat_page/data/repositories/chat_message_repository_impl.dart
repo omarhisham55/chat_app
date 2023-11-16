@@ -1,0 +1,46 @@
+import 'package:chat_app/core/error/exception.dart';
+import 'package:chat_app/core/error/failure.dart';
+import 'package:chat_app/core/network/network_info.dart';
+import 'package:chat_app/features/chat_page/data/datasources/chat_message_datasource.dart';
+import 'package:chat_app/features/chat_page/domain/repositories/chat_messages_repository.dart';
+import 'package:dartz/dartz.dart';
+
+class ChatMessagesReopsitoryImpl implements ChatMessagesReopsitory {
+  final NetworkInfo network;
+  final ChatMessageDatasource chatMessageDatasource;
+
+  ChatMessagesReopsitoryImpl({
+    required this.network,
+    required this.chatMessageDatasource,
+  });
+  @override
+  Future<Either<Failure, void>> getMessages() {
+    // TODO: implement getMessages
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, void>> sendMessage({
+    required String senderId,
+    required String receiverId,
+    required String dateTime,
+    required String message,
+  }) async {
+    if (await network.isConnected) {
+      try {
+        return Right(
+          await chatMessageDatasource.sendMessage(
+            senderId: senderId,
+            receiverId: receiverId,
+            dateTime: dateTime,
+            message: message,
+          ),
+        );
+      } on ServerException {
+        return Left(ServerFailure());
+      }
+    } else {
+      return Left(ServerFailure());
+    }
+  }
+}
