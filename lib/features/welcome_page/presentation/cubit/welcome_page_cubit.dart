@@ -10,6 +10,8 @@ part 'welcome_page_state.dart';
 class WelcomePageCubit extends Cubit<WelcomePageState> {
   GetSavedUserUsecase getSavedUserUsecase;
   GetAllUsersUsecase getAllUsersUsecase;
+  User? userModel;
+  List<User> allUsers = [];
   WelcomePageCubit({
     required this.getSavedUserUsecase,
     required this.getAllUsersUsecase,
@@ -22,7 +24,10 @@ class WelcomePageCubit extends Cubit<WelcomePageState> {
     );
     emit(response.fold(
       (failure) => const GetSavedUserErrorState(msg: "get saved user error"),
-      (success) => GetSavedUserSuccessState(userModel: success),
+      (success) {
+        userModel = success;
+        return GetSavedUserSuccessState(userModel: success);
+      },
     ));
   }
 
@@ -33,7 +38,10 @@ class WelcomePageCubit extends Cubit<WelcomePageState> {
     emit(
       response.fold(
         (l) => GetAllUsersErrorState(msg: l.toString()),
-        (users) => GetAllUsersSuccessState(userModel: users),
+        (users) {
+          allUsers = users;
+          return GetAllUsersSuccessState(userModel: users);
+        },
       ),
     );
   }

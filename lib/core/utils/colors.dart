@@ -6,5 +6,6 @@ class AppColors {
   static Color? shadedColor = Colors.grey[700];
   static Color lightThemePrimaryColor = HexColor("#008069");
   static Color lightThemeSecondaryColor = HexColor("#24D266");
+  static Color lightThemeThirdColor = HexColor("#C6E2C6");
   static Color darkWhiteBackgroundColor = HexColor("#F2F2F3");
 }

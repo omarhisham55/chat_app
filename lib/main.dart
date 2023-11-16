@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(create: (context) => di.injection<SignUpCubit>()),
         BlocProvider(
-          create: (context) => di.injection<WelcomePageCubit>()..getSavedUser()..getAllUsers(),
+          create: (context) => di.injection<WelcomePageCubit>()..getAllUsers()..getSavedUser(),
         ),
       ],
       child: MaterialApp(

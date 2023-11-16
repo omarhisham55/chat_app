@@ -1,7 +1,6 @@
 import 'package:chat_app/config/routes/routes.dart';
 import 'package:chat_app/core/utils/colors.dart';
 import 'package:chat_app/core/utils/strings.dart';
-import 'package:chat_app/core/widgets/indicator.dart';
 import 'package:chat_app/features/welcome_page/presentation/cubit/welcome_page_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,52 +15,50 @@ class Settings extends StatelessWidget {
 
   Widget _bodyHeader(_) => BlocBuilder<WelcomePageCubit, WelcomePageState>(
         builder: (context, state) {
-          if (state is GetSavedUserSuccessState) {
-            return Row(
-              children: [
-                const CircleAvatar(radius: 30),
-                Expanded(
-                  child: Container(
-                    margin: const EdgeInsets.only(left: 10),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          state.userModel!.username,
-                          style: Theme.of(_)
-                              .textTheme
-                              .titleLarge!
-                              .copyWith(color: Colors.black),
-                        ),
-                        Text(
-                          "Status",
-                          style: Theme.of(_).textTheme.titleMedium,
-                        ),
-                      ],
-                    ),
+          return Row(
+            children: [
+              const CircleAvatar(radius: 30),
+              Expanded(
+                child: Container(
+                  margin: const EdgeInsets.only(left: 10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        BlocProvider.of<WelcomePageCubit>(_)
+                            .userModel!
+                            .username,
+                        style: Theme.of(_)
+                            .textTheme
+                            .titleLarge!
+                            .copyWith(color: Colors.black),
+                      ),
+                      Text(
+                        "Status",
+                        style: Theme.of(_).textTheme.titleMedium,
+                      ),
+                    ],
                   ),
                 ),
-                IconButton(
-                  onPressed: () {},
-                  splashRadius: 25,
-                  icon: Icon(
-                    Icons.qr_code,
-                    color: AppColors.lightThemePrimaryColor,
-                  ),
+              ),
+              IconButton(
+                onPressed: () {},
+                splashRadius: 25,
+                icon: Icon(
+                  Icons.qr_code,
+                  color: AppColors.lightThemePrimaryColor,
                 ),
-                IconButton(
-                  onPressed: () {},
-                  splashRadius: 25,
-                  icon: Icon(
-                    Icons.arrow_drop_down_circle_outlined,
-                    color: AppColors.lightThemePrimaryColor,
-                  ),
+              ),
+              IconButton(
+                onPressed: () {},
+                splashRadius: 25,
+                icon: Icon(
+                  Icons.arrow_drop_down_circle_outlined,
+                  color: AppColors.lightThemePrimaryColor,
                 ),
-              ],
-            );
-          } else {
-            return const LoadingIndicator();
-          }
+              ),
+            ],
+          );
         },
       );
 

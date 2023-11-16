@@ -1,5 +1,7 @@
 import 'package:chat_app/core/utils/strings.dart';
+import 'package:chat_app/features/chat_page/presentation/pages/into_chat.dart';
 import 'package:chat_app/features/navigation_page/presentation/pages/navigation_page.dart';
+import 'package:chat_app/features/registration/domain/entities/user.dart';
 import 'package:chat_app/features/registration/presentation/cubit/login/login_cubit.dart';
 import 'package:chat_app/features/registration/presentation/pages/login/login.dart';
 import 'package:chat_app/features/registration/presentation/pages/sign_up/otp_verification.dart';
@@ -21,6 +23,7 @@ class Routes {
   static const String navigationRoute = "/navigation";
   static const String settingsRoute = "/settings";
   static const String settingsDetailsRoute = "/settingsDetails";
+  static const String intoChatRoute = "/intoChatDetails";
 
   Routes._();
   factory Routes() => Routes._();
@@ -61,6 +64,12 @@ class Routes {
       settingsDetailsRoute: (settings) => MaterialPageRoute(
             builder: (context) => SettingDetailPage(
               title: settings.arguments as String,
+            ),
+            settings: settings,
+          ),
+      intoChatRoute: (settings) => MaterialPageRoute(
+            builder: (context) => IntoChat(
+              otherUser: settings.arguments as User,
             ),
             settings: settings,
           ),

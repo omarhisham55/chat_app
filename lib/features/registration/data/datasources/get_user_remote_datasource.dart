@@ -54,8 +54,10 @@ class GetAllUsersDataSourceImp implements GetAllUsersDataSource {
   final SharedPreferences sharedPreferences;
   List<UserModel> users = [];
 
-  GetAllUsersDataSourceImp(
-      {required this.firebaseConsumer, required this.sharedPreferences});
+  GetAllUsersDataSourceImp({
+    required this.firebaseConsumer,
+    required this.sharedPreferences,
+  });
 
   @override
   Future<List<UserModel>> getAllUsers() async {
