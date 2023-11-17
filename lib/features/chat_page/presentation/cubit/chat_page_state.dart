@@ -24,3 +24,19 @@ class SendChatFailed extends ChatPageState {
   @override
   List<Object> get props => [msg];
 }
+
+class GetChatSuccess extends ChatPageState {
+  final List<Chat> msg;
+  const GetChatSuccess(this.msg);
+
+  @override
+  List<Object> get props => [msg];
+}
+
+class GetChatFailed extends ChatPageState {
+  final String msg;
+  const GetChatFailed({this.msg = "message failed to receive"});
+
+  @override
+  List<Object> get props => [msg];
+}

@@ -9,6 +9,9 @@ ThemeData lightTheme() => ThemeData(
           statusBarColor: AppColors.lightThemePrimaryColor,
         ),
       ),
+      bottomSheetTheme: const BottomSheetThemeData(
+        backgroundColor: Colors.transparent,
+      ),
       textTheme: TextTheme(
         displayMedium: const TextStyle(
           color: Colors.black,

@@ -1,3 +1,6 @@
+
+import 'package:chat_app/features/chat_page/domain/entities/chat.dart';
+
 abstract class FirebaseMessaging {
   Future<void> sendMessages({
     required String senderId,
@@ -5,5 +8,8 @@ abstract class FirebaseMessaging {
     required String dateTime,
     required String message,
   });
-  // Future<>
+  List<Chat> getMessages({
+    required String senderId,
+    required String receiverId,
+  });
 }

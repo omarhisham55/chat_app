@@ -1,4 +1,5 @@
 import 'package:chat_app/core/error/failure.dart';
+import 'package:chat_app/features/chat_page/domain/entities/chat.dart';
 import 'package:dartz/dartz.dart';
 
 abstract class ChatMessagesReopsitory {
@@ -8,5 +9,8 @@ abstract class ChatMessagesReopsitory {
     required String dateTime,
     required String message,
   });
-  Future<Either<Failure, void>> getMessages();
+  Future<Either<Failure, List<Chat>>> getMessages({
+    required String senderId,
+    required String receiverId,
+  });
 }

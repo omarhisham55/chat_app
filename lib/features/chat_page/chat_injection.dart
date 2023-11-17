@@ -8,7 +8,10 @@ import 'package:chat_app/injection_container.dart';
 Future<void> chatInjection() async {
   //cubit
   injection.registerFactory(
-    () => ChatPageCubit(chatMessagesUseCase: injection()),
+    () => ChatPageCubit(
+      chatMessagesUseCase: injection(),
+      getChatMessagesUseCase: injection(),
+    ),
   );
   //datasource
   injection.registerLazySingleton<ChatMessageDatasource>(
@@ -23,6 +26,9 @@ Future<void> chatInjection() async {
   );
   //usecase
   injection.registerLazySingleton(
-    () => ChatMessagesUseCase(chatMessagesReopsitory: injection()),
+    () => SendChatMessagesUseCase(chatMessagesReopsitory: injection()),
+  );
+  injection.registerLazySingleton(
+    () => GetChatMessagesUseCase(chatMessagesReopsitory: injection()),
   );
 }

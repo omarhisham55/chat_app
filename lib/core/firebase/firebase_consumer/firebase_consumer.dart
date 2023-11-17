@@ -3,6 +3,7 @@ import 'package:chat_app/core/firebase/firebase_auth/firebase_auth.dart';
 import 'package:chat_app/core/firebase/firebase_auth/firebase_messaging.dart';
 import 'package:chat_app/core/utils/constants.dart';
 import 'package:chat_app/features/chat_page/data/models/chat_model.dart';
+import 'package:chat_app/features/chat_page/domain/entities/chat.dart';
 import 'package:chat_app/features/registration/data/models/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -204,5 +205,29 @@ class FirebaseConsumer implements FirebaseMessaging {
     } catch (error) {
       debugPrint(error.toString());
     }
+  }
+
+  @override
+  List<Chat> getMessages({
+    required String senderId,
+    required String receiverId,
+  }) {
+    final List<Chat> messages = [];
+    firebaseFirestore
+        .collection("users")
+        .doc(senderId)
+        .collection("chats")
+        .doc(receiverId)
+        .collection("messages")
+        .orderBy("dateTime")
+        .snapshots()
+        .listen((event) {
+      for (var element in event.docs) {
+        messages.add(
+          ChatModel.fromJson(element.data()),
+        );
+      }
+    });
+    return messages;
   }
 }

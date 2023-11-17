@@ -1,6 +1,7 @@
 import 'package:chat_app/config/routes/routes.dart';
 import 'package:chat_app/core/utils/colors.dart';
 import 'package:chat_app/core/widgets/indicator.dart';
+import 'package:chat_app/features/chat_page/presentation/cubit/chat_page_cubit.dart';
 import 'package:chat_app/features/registration/domain/entities/user.dart';
 import 'package:chat_app/features/welcome_page/presentation/cubit/welcome_page_cubit.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
@@ -58,7 +59,10 @@ class ChatList extends StatelessWidget {
                       ),
                       const SizedBox(height: 5),
                       Text(
-                        user.id,
+                        BlocProvider.of<ChatPageCubit>(context)
+                            .messages
+                            .last
+                            .message,
                         style: Theme.of(context).textTheme.titleSmall!.copyWith(
                             color: AppColors.shadedColor,
                             overflow: TextOverflow.ellipsis),

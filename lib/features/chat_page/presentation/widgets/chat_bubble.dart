@@ -2,7 +2,10 @@ import 'package:chat_app/core/utils/colors.dart';
 import 'package:flutter/material.dart';
 
 class UserBubbleChat extends StatelessWidget {
-  const UserBubbleChat({super.key});
+  final String message;
+  final String dateTime;
+  const UserBubbleChat(
+      {super.key, required this.message, required this.dateTime});
 
   @override
   Widget build(BuildContext context) {
@@ -27,12 +30,12 @@ class UserBubbleChat extends StatelessWidget {
               crossAxisAlignment: WrapCrossAlignment.end,
               children: [
                 Text(
-                  "message.text",
+                  message,
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
                 const SizedBox(width: 10.0),
                 Text(
-                  "message.dateTime",
+                  dateTime,
                   style: Theme.of(context).textTheme.bodySmall,
                   textAlign: TextAlign.end,
                 ),
@@ -46,7 +49,10 @@ class UserBubbleChat extends StatelessWidget {
 }
 
 class OtherBubbleChat extends StatelessWidget {
-  const OtherBubbleChat({super.key});
+  final String message;
+  final String dateTime;
+  const OtherBubbleChat(
+      {super.key, required this.message, required this.dateTime});
 
   @override
   Widget build(BuildContext context) {
@@ -71,12 +77,12 @@ class OtherBubbleChat extends StatelessWidget {
               crossAxisAlignment: WrapCrossAlignment.end,
               children: [
                 Text(
-                  "message.text",
+                  message,
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
                 const SizedBox(width: 10.0),
                 Text(
-                  "message.dateTime",
+                  dateTime,
                   style: Theme.of(context).textTheme.bodySmall,
                   textAlign: TextAlign.end,
                 ),

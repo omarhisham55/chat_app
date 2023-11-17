@@ -1,4 +1,3 @@
-import 'package:chat_app/core/firebase/firebase_auth/firebase_messaging.dart';
 import 'package:chat_app/core/firebase/firebase_consumer/firebase_consumer.dart';
 import 'package:chat_app/core/network/network_info.dart';
 import 'package:chat_app/features/chat_page/chat_injection.dart';

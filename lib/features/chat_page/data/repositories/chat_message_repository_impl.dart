@@ -2,6 +2,7 @@ import 'package:chat_app/core/error/exception.dart';
 import 'package:chat_app/core/error/failure.dart';
 import 'package:chat_app/core/network/network_info.dart';
 import 'package:chat_app/features/chat_page/data/datasources/chat_message_datasource.dart';
+import 'package:chat_app/features/chat_page/domain/entities/chat.dart';
 import 'package:chat_app/features/chat_page/domain/repositories/chat_messages_repository.dart';
 import 'package:dartz/dartz.dart';
 
@@ -14,9 +15,24 @@ class ChatMessagesReopsitoryImpl implements ChatMessagesReopsitory {
     required this.chatMessageDatasource,
   });
   @override
-  Future<Either<Failure, void>> getMessages() {
-    // TODO: implement getMessages
-    throw UnimplementedError();
+  Future<Either<Failure, List<Chat>>> getMessages({
+    required String senderId,
+    required String receiverId,
+  }) async {
+    if (await network.isConnected) {
+      try {
+        return Right(
+          chatMessageDatasource.getMessage(
+            senderId: senderId,
+            receiverId: receiverId,
+          ),
+        );
+      } on ServerException {
+        return Left(ServerFailure());
+      }
+    } else {
+      return Left(ServerFailure());
+    }
   }
 
   @override

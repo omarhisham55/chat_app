@@ -1,3 +1,4 @@
+import 'package:chat_app/features/chat_page/domain/entities/chat.dart';
 import 'package:chat_app/features/chat_page/domain/usecases/chat_message_usecase.dart';
 import 'package:chat_app/features/welcome_page/presentation/cubit/welcome_page_cubit.dart';
 import 'package:equatable/equatable.dart';
@@ -7,8 +8,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 part 'chat_page_state.dart';
 
 class ChatPageCubit extends Cubit<ChatPageState> {
-  ChatMessagesUseCase chatMessagesUseCase;
-  ChatPageCubit({required this.chatMessagesUseCase}) : super(ChatPageInitial());
+  final SendChatMessagesUseCase chatMessagesUseCase;
+  final GetChatMessagesUseCase getChatMessagesUseCase;
+  List<Chat> messages = [];
+  ChatPageCubit({
+    required this.chatMessagesUseCase,
+    required this.getChatMessagesUseCase,
+  }) : super(ChatPageInitial());
 
   TextEditingController messageController = TextEditingController();
 
@@ -16,16 +22,38 @@ class ChatPageCubit extends Cubit<ChatPageState> {
     required BuildContext context,
     required String receiverId,
   }) async {
-    final response = await chatMessagesUseCase.call([
+    if (messageController.text.isNotEmpty) {
+      final response = await chatMessagesUseCase.call([
+        BlocProvider.of<WelcomePageCubit>(context).userModel!.id,
+        receiverId,
+        "${DateTime.now().hour}: ${DateTime.now().minute}",
+        messageController.text,
+      ]);
+      messageController.clear();
+      emit(
+        response.fold(
+          (failure) => const SendChatFailed(),
+          (success) => const SendChatSuccess("sent"),
+        ),
+      );
+    }
+  }
+
+  void getChat({
+    required BuildContext context,
+    required String receiverId,
+  }) async {
+    final response = await getChatMessagesUseCase.call([
       BlocProvider.of<WelcomePageCubit>(context).userModel!.id,
       receiverId,
-      "${DateTime.now().hour}: ${DateTime.now().minute}",
-      messageController.text,
     ]);
     emit(
       response.fold(
-        (failure) => const SendChatFailed(),
-        (success) => const SendChatSuccess("sent"),
+        (l) => const GetChatFailed(),
+        (r) {
+          messages = r;
+          return GetChatSuccess(r);
+        },
       ),
     );
   }

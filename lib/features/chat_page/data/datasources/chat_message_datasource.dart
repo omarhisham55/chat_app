@@ -1,4 +1,5 @@
 import 'package:chat_app/core/firebase/firebase_consumer/firebase_consumer.dart';
+import 'package:chat_app/features/chat_page/domain/entities/chat.dart';
 
 abstract class ChatMessageDatasource {
   Future<void> sendMessage({
@@ -7,7 +8,10 @@ abstract class ChatMessageDatasource {
     required String dateTime,
     required String message,
   });
-  Future<void> getMessage();
+  List<Chat> getMessage({
+    required String senderId,
+    required String receiverId,
+  });
 }
 
 class ChatMessageDatasourceImpl extends ChatMessageDatasource {
@@ -15,9 +19,11 @@ class ChatMessageDatasourceImpl extends ChatMessageDatasource {
 
   ChatMessageDatasourceImpl({required this.firebaseConsumer});
   @override
-  Future<void> getMessage() {
-    // TODO: implement getMessage
-    throw UnimplementedError();
+  List<Chat> getMessage({
+    required String senderId,
+    required String receiverId,
+  }) {
+    return firebaseConsumer.getMessages(senderId: senderId, receiverId: receiverId);
   }
 
   @override

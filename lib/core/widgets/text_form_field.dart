@@ -56,15 +56,21 @@ class ChatTextFormField extends StatelessWidget {
   }
 }
 
-class MessagesTextField extends StatelessWidget {
+class MessagesTextField extends StatefulWidget {
   final TextEditingController controller;
-  final Function(String)? onFieldSubmitted;
+  final void Function() onSend;
   const MessagesTextField({
     super.key,
     required this.controller,
-    this.onFieldSubmitted,
+    required this.onSend,
   });
 
+  @override
+  State<MessagesTextField> createState() => _MessagesTextFieldState();
+}
+
+class _MessagesTextFieldState extends State<MessagesTextField> {
+  bool change = false;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -86,15 +92,25 @@ class MessagesTextField extends StatelessWidget {
                     ),
                     const SizedBox(width: 10.0),
                     Expanded(
-                        child: TextFormField(
-                      controller: controller,
-                      decoration: const InputDecoration(
-                        border: InputBorder.none,
-                        focusedBorder: InputBorder.none,
-                        hintText: 'Type a message...',
+                      child: TextFormField(
+                        controller: widget.controller,
+                        decoration: const InputDecoration(
+                          border: InputBorder.none,
+                          focusedBorder: InputBorder.none,
+                          hintText: 'Type a message...',
+                        ),
+                        onFieldSubmitted: (value) => widget.onSend,
+                        onChanged: (value) {
+                          setState(() {
+                            if (value.isNotEmpty) {
+                              change = true;
+                            } else {
+                              change = false;
+                            }
+                          });
+                        },
                       ),
-                      onFieldSubmitted: onFieldSubmitted,
-                    )),
+                    ),
                     IconButton(
                       onPressed: () {},
                       icon: Icon(
@@ -102,11 +118,14 @@ class MessagesTextField extends StatelessWidget {
                         color: AppColors.shadedColor,
                       ),
                     ),
-                    IconButton(
-                      onPressed: () {},
-                      icon: Icon(
-                        Icons.camera_alt,
-                        color: AppColors.shadedColor,
+                    Visibility(
+                      visible: !change,
+                      child: IconButton(
+                        onPressed: () {},
+                        icon: Icon(
+                          Icons.camera_alt,
+                          color: AppColors.shadedColor,
+                        ),
                       ),
                     ),
                   ],
@@ -117,17 +136,10 @@ class MessagesTextField extends StatelessWidget {
           const SizedBox(width: 5.0),
           CircleAvatar(
             radius: 25.0,
+            backgroundColor: AppColors.lightThemePrimaryColor,
             child: IconButton(
-              onPressed: () {
-                // if (ChatManager.chatPageManager(context).text.text != '') {
-                //   ChatManager.chatPageManager(context).sendMessage(
-                //       context: context,
-                //       receiverId: model.id,
-                //       dateTime: DateTime.now().toString(),
-                //       text: ChatManager.chatPageManager(context).text.text);
-                // }
-                // ChatManager.chatPageManager(context).text.text = '';
-              },
+              splashRadius: 25.0,
+              onPressed: widget.onSend,
               icon: const Icon(
                 Icons.send,
                 color: AppColors.whiteBackgroundColor,
