@@ -1,4 +1,5 @@
 import 'package:chat_app/features/chat_page/domain/entities/chat.dart';
+import 'package:intl/intl.dart';
 
 class ChatModel extends Chat {
   const ChatModel({
@@ -11,7 +12,7 @@ class ChatModel extends Chat {
   factory ChatModel.fromJson(Map<String, dynamic> json) => ChatModel(
         senderId: json["senderId"],
         receiverId: json["receiverId"],
-        dateTime: json["dateTime"],
+        dateTime: DateFormat.Hm().format(DateTime.parse(json["dateTime"])),
         message: json["message"],
       );
 

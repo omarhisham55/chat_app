@@ -55,7 +55,9 @@ class Login extends StatelessWidget {
                         .formKey
                         .currentState!
                         .validate()
-                    ? BlocProvider.of<LoginCubit>(context).userLogin().then(
+                    ? BlocProvider.of<LoginCubit>(context)
+                        .userLogin(context)
+                        .then(
                           (value) => BlocProvider.of<WelcomePageCubit>(context)
                               .getSavedUser(),
                         )

@@ -18,12 +18,12 @@ class SendChatMessagesUseCase extends UseCase<void, List<String>> {
       );
 }
 
-class GetChatMessagesUseCase extends UseCase<List<Chat>, List<String>> {
+class GetChatMessagesUseCase extends UseCase<Stream<List<Chat>>, List<String>> {
   final ChatMessagesReopsitory chatMessagesReopsitory;
 
   GetChatMessagesUseCase({required this.chatMessagesReopsitory});
   @override
-  Future<Either<Failure, List<Chat>>> call(List<String> params) =>
+  Future<Either<Failure, Stream<List<Chat>>>> call(List<String> params) =>
       chatMessagesReopsitory.getMessages(
         senderId: params[0],
         receiverId: params[1],

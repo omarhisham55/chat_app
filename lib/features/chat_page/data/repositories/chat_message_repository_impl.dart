@@ -15,7 +15,7 @@ class ChatMessagesReopsitoryImpl implements ChatMessagesReopsitory {
     required this.chatMessageDatasource,
   });
   @override
-  Future<Either<Failure, List<Chat>>> getMessages({
+  Future<Either<Failure, Stream<List<Chat>>>> getMessages({
     required String senderId,
     required String receiverId,
   }) async {

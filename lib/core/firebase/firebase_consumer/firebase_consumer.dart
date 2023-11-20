@@ -208,12 +208,11 @@ class FirebaseConsumer implements FirebaseMessaging {
   }
 
   @override
-  List<Chat> getMessages({
+  Stream<List<Chat>> getMessages({
     required String senderId,
     required String receiverId,
   }) {
-    final List<Chat> messages = [];
-    firebaseFirestore
+    return firebaseFirestore
         .collection("users")
         .doc(senderId)
         .collection("chats")
@@ -221,13 +220,8 @@ class FirebaseConsumer implements FirebaseMessaging {
         .collection("messages")
         .orderBy("dateTime")
         .snapshots()
-        .listen((event) {
-      for (var element in event.docs) {
-        messages.add(
-          ChatModel.fromJson(element.data()),
-        );
-      }
-    });
-    return messages;
+        .map((querySnapshot) => querySnapshot.docs
+            .map((doc) => ChatModel.fromJson(doc.data()))
+            .toList());
   }
 }

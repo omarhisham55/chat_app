@@ -26,7 +26,7 @@ class ChatPageCubit extends Cubit<ChatPageState> {
       final response = await chatMessagesUseCase.call([
         BlocProvider.of<WelcomePageCubit>(context).userModel!.id,
         receiverId,
-        "${DateTime.now().hour}: ${DateTime.now().minute}",
+        DateTime.now().toString(),
         messageController.text,
       ]);
       messageController.clear();
@@ -39,20 +39,22 @@ class ChatPageCubit extends Cubit<ChatPageState> {
     }
   }
 
-  void getChat({
+  Stream getChat({
     required BuildContext context,
     required String receiverId,
-  }) async {
+  }) async* {
     final response = await getChatMessagesUseCase.call([
       BlocProvider.of<WelcomePageCubit>(context).userModel!.id,
       receiverId,
     ]);
     emit(
-      response.fold(
+      await response.fold(
         (l) => const GetChatFailed(),
-        (r) {
-          messages = r;
-          return GetChatSuccess(r);
+        (r) async {
+          r.forEach((e) {
+            messages = e;
+          });
+          return GetChatSuccess(await r.length);
         },
       ),
     );

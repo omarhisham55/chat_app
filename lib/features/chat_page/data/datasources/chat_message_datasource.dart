@@ -8,7 +8,7 @@ abstract class ChatMessageDatasource {
     required String dateTime,
     required String message,
   });
-  List<Chat> getMessage({
+  Stream<List<Chat>> getMessage({
     required String senderId,
     required String receiverId,
   });
@@ -19,7 +19,7 @@ class ChatMessageDatasourceImpl extends ChatMessageDatasource {
 
   ChatMessageDatasourceImpl({required this.firebaseConsumer});
   @override
-  List<Chat> getMessage({
+  Stream<List<Chat>> getMessage({
     required String senderId,
     required String receiverId,
   }) {

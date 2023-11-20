@@ -8,7 +8,7 @@ abstract class FirebaseMessaging {
     required String dateTime,
     required String message,
   });
-  List<Chat> getMessages({
+  Stream<List<Chat>> getMessages({
     required String senderId,
     required String receiverId,
   });

@@ -26,7 +26,7 @@ class SendChatFailed extends ChatPageState {
 }
 
 class GetChatSuccess extends ChatPageState {
-  final List<Chat> msg;
+  final int msg;
   const GetChatSuccess(this.msg);
 
   @override
