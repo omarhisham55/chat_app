@@ -5,7 +5,7 @@ import 'package:chat_app/features/chat_page/domain/repositories/chat_messages_re
 import 'package:dartz/dartz.dart';
 
 class SendChatMessagesUseCase extends UseCase<void, List<String>> {
-  final ChatMessagesReopsitory chatMessagesReopsitory;
+  final ChatMessagesRepository chatMessagesReopsitory;
 
   SendChatMessagesUseCase({required this.chatMessagesReopsitory});
   @override
@@ -19,12 +19,12 @@ class SendChatMessagesUseCase extends UseCase<void, List<String>> {
 }
 
 class GetChatMessagesUseCase extends UseCase<Stream<List<Chat>>, List<String>> {
-  final ChatMessagesReopsitory chatMessagesReopsitory;
+  final ChatMessagesRepository chatMessagesRepository;
 
-  GetChatMessagesUseCase({required this.chatMessagesReopsitory});
+  GetChatMessagesUseCase({required this.chatMessagesRepository});
   @override
   Future<Either<Failure, Stream<List<Chat>>>> call(List<String> params) =>
-      chatMessagesReopsitory.getMessages(
+      chatMessagesRepository.getMessages(
         senderId: params[0],
         receiverId: params[1],
       );

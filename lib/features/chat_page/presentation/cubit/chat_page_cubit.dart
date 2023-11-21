@@ -1,6 +1,7 @@
 import 'package:chat_app/features/chat_page/domain/entities/chat.dart';
 import 'package:chat_app/features/chat_page/domain/usecases/chat_message_usecase.dart';
 import 'package:chat_app/features/welcome_page/presentation/cubit/welcome_page_cubit.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -39,7 +40,7 @@ class ChatPageCubit extends Cubit<ChatPageState> {
     }
   }
 
-  Stream getChat({
+  Stream<List<Chat>> getChat({
     required BuildContext context,
     required String receiverId,
   }) async* {
@@ -48,15 +49,16 @@ class ChatPageCubit extends Cubit<ChatPageState> {
       receiverId,
     ]);
     emit(
-      await response.fold(
+      response.fold(
         (l) => const GetChatFailed(),
-        (r) async {
+        (r) {
           r.forEach((e) {
             messages = e;
           });
-          return GetChatSuccess(await r.length);
+          return GetChatSuccess(DateTime.now().millisecond);
         },
       ),
     );
+    yield messages;
   }
 }

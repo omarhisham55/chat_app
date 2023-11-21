@@ -18,7 +18,7 @@ Future<void> chatInjection() async {
     () => ChatMessageDatasourceImpl(firebaseConsumer: injection()),
   );
   //repository
-  injection.registerLazySingleton<ChatMessagesReopsitory>(
+  injection.registerLazySingleton<ChatMessagesRepository>(
     () => ChatMessagesReopsitoryImpl(
       network: injection(),
       chatMessageDatasource: injection(),
@@ -29,6 +29,6 @@ Future<void> chatInjection() async {
     () => SendChatMessagesUseCase(chatMessagesReopsitory: injection()),
   );
   injection.registerLazySingleton(
-    () => GetChatMessagesUseCase(chatMessagesReopsitory: injection()),
+    () => GetChatMessagesUseCase(chatMessagesRepository: injection()),
   );
 }

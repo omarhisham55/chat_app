@@ -220,8 +220,10 @@ class FirebaseConsumer implements FirebaseMessaging {
         .collection("messages")
         .orderBy("dateTime")
         .snapshots()
-        .map((querySnapshot) => querySnapshot.docs
-            .map((doc) => ChatModel.fromJson(doc.data()))
-            .toList());
+        .map(
+          (querySnapshot) => querySnapshot.docs
+              .map((doc) => ChatModel.fromJson(doc.data()))
+              .toList(),
+        );
   }
 }

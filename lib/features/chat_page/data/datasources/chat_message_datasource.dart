@@ -23,7 +23,10 @@ class ChatMessageDatasourceImpl extends ChatMessageDatasource {
     required String senderId,
     required String receiverId,
   }) {
-    return firebaseConsumer.getMessages(senderId: senderId, receiverId: receiverId);
+    return firebaseConsumer.getMessages(
+      senderId: senderId,
+      receiverId: receiverId,
+    );
   }
 
   @override

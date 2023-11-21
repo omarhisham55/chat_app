@@ -1,4 +1,3 @@
-
 import 'package:chat_app/features/chat_page/domain/entities/chat.dart';
 
 abstract class FirebaseMessaging {

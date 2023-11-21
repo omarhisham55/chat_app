@@ -6,7 +6,7 @@ import 'package:chat_app/features/chat_page/domain/entities/chat.dart';
 import 'package:chat_app/features/chat_page/domain/repositories/chat_messages_repository.dart';
 import 'package:dartz/dartz.dart';
 
-class ChatMessagesReopsitoryImpl implements ChatMessagesReopsitory {
+class ChatMessagesReopsitoryImpl implements ChatMessagesRepository {
   final NetworkInfo network;
   final ChatMessageDatasource chatMessageDatasource;
 
