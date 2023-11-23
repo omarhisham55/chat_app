@@ -25,7 +25,7 @@ class Settings extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        BlocProvider.of<SplashScreenCubit>(_)
+                        SplashScreenCubit
                             .userModel!
                             .username,
                         style: Theme.of(_)

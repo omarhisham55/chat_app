@@ -71,7 +71,7 @@ class IntoChat extends StatelessWidget {
               return ListView(
                 padding: const EdgeInsets.only(bottom: 70),
                 children: data.map<Widget>((chat) {
-                  if (BlocProvider.of<SplashScreenCubit>(context)
+                  if (SplashScreenCubit
                           .userModel!
                           .id ==
                       chat.senderId) {

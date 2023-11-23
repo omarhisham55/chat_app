@@ -1,4 +1,3 @@
-import 'package:chat_app/core/utils/colors.dart';
 import 'package:chat_app/features/chat_page/domain/entities/chat.dart';
 import 'package:chat_app/features/chat_page/domain/usecases/chat_message_usecase.dart';
 import 'package:chat_app/features/registration/domain/entities/user.dart';
@@ -26,7 +25,7 @@ class ChatPageCubit extends Cubit<ChatPageState> {
   }) async {
     if (messageController.text.isNotEmpty) {
       final response = await chatMessagesUseCase.call([
-        BlocProvider.of<SplashScreenCubit>(context).userModel!.id,
+        SplashScreenCubit.userModel!.id,
         receiverId,
         DateTime.now().toString(),
         messageController.text,
@@ -46,7 +45,7 @@ class ChatPageCubit extends Cubit<ChatPageState> {
     required String receiverId,
   }) async* {
     final response = await getChatMessagesUseCase.call([
-      BlocProvider.of<SplashScreenCubit>(context).userModel!.id,
+      SplashScreenCubit.userModel!.id,
       receiverId,
     ]);
     emit(
@@ -63,28 +62,39 @@ class ChatPageCubit extends Cubit<ChatPageState> {
     yield messages;
   }
 
-  void getAllChatMessages(context) {
-    for (int i = 0;
-        i < BlocProvider.of<SplashScreenCubit>(context).allUsers.length - 1;
-        i++) {
-      BlocProvider.of<ChatPageCubit>(context).getChat(
-        context: context,
-        receiverId: BlocProvider.of<SplashScreenCubit>(context).allUsers[i].id,
-      );
-      print('sha8al');
-    }
-  }
+  // void getAllChatMessages(context) {
+  //   for (int i = 0;
+  //       i < BlocProvider.of<SplashScreenCubit>(context).allUsers.length - 1;
+  //       i++) {
+  //     BlocProvider.of<ChatPageCubit>(context).getChat(
+  //       context: context,
+  //       receiverId: BlocProvider.of<SplashScreenCubit>(context).allUsers[i].id,
+  //     );
+  //     print('sha8al');
+  //   }
+  // }
 
   List<User> selectedChatList = [];
-  List<Color> chatBackgroundColor(context) => List.generate(
-      BlocProvider.of<SplashScreenCubit>(context).allUsers.length,
-      (index) => AppColors.whiteBackgroundColor);
-  void selectedChat(BuildContext context, int index, User user) {
+  List<bool> chatBackgroundColor = List.generate(
+    SplashScreenCubit.allUsers.length,
+    (index) => false,
+  );
+  void selectedChat(int index, User user) {
     if (selectedChatList.contains(user)) {
-      chatBackgroundColor(context)[index] = AppColors.whiteBackgroundColor;
+      return;
+    } else {
+      chatBackgroundColor[index] = true;
+      selectedChatList.add(user);
+    }
+    emit(SelectedChatState(list: selectedChatList.length));
+  }
+
+  void removeSelectedChat(int index, User user) {
+    if (selectedChatList.contains(user)) {
+      chatBackgroundColor[index] = false;
       selectedChatList.remove(user);
     } else {
-      chatBackgroundColor(context)[index] = AppColors.lightThemePrimaryColor;
+      chatBackgroundColor[index] = true;
       selectedChatList.add(user);
     }
     emit(SelectedChatState(list: selectedChatList.length));

@@ -35,8 +35,9 @@ class LoginCubit extends Cubit<LoginState> {
     emit(response.fold(
       (failure) => const GetUserErrorState(msg: "get user failed"),
       (success) {
-        BlocProvider.of<SplashScreenCubit>(context).userModel = success;
-        BlocProvider.of<SplashScreenCubit>(context).allUsers.remove(success);
+        SplashScreenCubit.userModel = success;
+        BlocProvider.of<SplashScreenCubit>(context).getAllUsers();
+        SplashScreenCubit.allUsers.remove(success);
         return GetUserSuccessState(userModel: success);
       },
     ));

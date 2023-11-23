@@ -12,55 +12,68 @@ class ChatList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (BlocProvider.of<SplashScreenCubit>(context).allUsers.isEmpty) {
-      return Center(
-        child: Text(
-          "No Users found",
-          style: Theme.of(context).textTheme.headlineSmall,
-        ),
-      );
-    } else {
-      return BlocBuilder<ChatPageCubit, ChatPageState>(
-        builder: (context, state) {
-          return ListView.separated(
+    return BlocBuilder<ChatPageCubit, ChatPageState>(
+      builder: (context, state) {
+        if (SplashScreenCubit.allUsers.isEmpty) {
+          return Center(
+            child: Text(
+              "No Users found",
+              style: Theme.of(context).textTheme.headlineSmall,
+            ),
+          );
+        } else {
+          return ListView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             itemBuilder: (context, index) => _chatListItem(
               context: context,
-              user: BlocProvider.of<SplashScreenCubit>(context).allUsers[index],
+              user: SplashScreenCubit.allUsers[index],
               focusColor: BlocProvider.of<ChatPageCubit>(context)
-                  .chatBackgroundColor(context)[index],
+                  .chatBackgroundColor[index],
               onLongPress: () =>
                   BlocProvider.of<ChatPageCubit>(context).selectedChat(
-                context,
                 index,
-                BlocProvider.of<SplashScreenCubit>(context).allUsers[index],
+                SplashScreenCubit.allUsers[index],
+              ),
+              onTapDuringLongPress: () =>
+                  BlocProvider.of<ChatPageCubit>(context).removeSelectedChat(
+                index,
+                SplashScreenCubit.allUsers[index],
               ),
             ),
-            separatorBuilder: (context, index) => const SizedBox(height: 10),
-            itemCount:
-                BlocProvider.of<SplashScreenCubit>(context).allUsers.length,
+            itemCount: SplashScreenCubit.allUsers.length,
           );
-        },
-      );
-    }
+        }
+      },
+    );
   }
 
   Widget _chatListItem({
     required BuildContext context,
     required User user,
-    required Color focusColor,
+    required bool focusColor,
     required Function() onLongPress,
+    required Function onTapDuringLongPress,
   }) =>
       InkWell(
-        onTap: () => Navigator.pushNamed(
-          context,
-          Routes.intoChatRoute,
-          arguments: user,
-        ),
+        onTap: () {
+          if (BlocProvider.of<ChatPageCubit>(context)
+              .chatBackgroundColor
+              .contains(true)) {
+            onTapDuringLongPress();
+          } else {
+            Navigator.pushNamed(
+              context,
+              Routes.intoChatRoute,
+              arguments: user,
+            );
+          }
+        },
         onLongPress: onLongPress,
         child: Container(
-          color: focusColor,
+          color: focusColor
+              ? AppColors.shadedWhiteBackgroundColor
+              : AppColors.whiteBackgroundColor,
           child: Padding(
             padding: const EdgeInsets.all(10.0),
             child: BlocBuilder<ChatPageCubit, ChatPageState>(
@@ -69,7 +82,7 @@ class ChatList extends StatelessWidget {
                   BlocProvider.of<ChatPageCubit>(context).messages;
               final String finalMessage = messages.isNotEmpty
                   ? messages.last.message
-                  : "getting message...";
+                  : "";
               final String finalDateTime =
                   messages.isNotEmpty ? messages.last.dateTime : "";
               return Row(

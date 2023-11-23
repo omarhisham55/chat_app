@@ -11,12 +11,13 @@ part 'splash_screen_state.dart';
 class SplashScreenCubit extends Cubit<SplashScreenState> {
   GetSavedUserUsecase getSavedUserUsecase;
   GetAllUsersUsecase getAllUsersUsecase;
-  User? userModel;
-  List<User> allUsers = [];
+  static User? userModel;
+  static List<User> allUsers = [];
   SplashScreenCubit({
     required this.getSavedUserUsecase,
     required this.getAllUsersUsecase,
   }) : super(SplashScreenInitial());
+
   Future getSavedUser() async {
     emit(LoadingGetSavedUserState());
     Either<Failure, User?> response = await getSavedUserUsecase.call(
