@@ -80,15 +80,34 @@ class ChatList extends StatelessWidget {
                 builder: (context, state) {
               final List<Chat> messages =
                   BlocProvider.of<ChatPageCubit>(context).messages;
-              final String finalMessage = messages.isNotEmpty
-                  ? messages.last.message
-                  : "";
+              final String finalMessage =
+                  messages.isNotEmpty ? messages.last.message : "";
               final String finalDateTime =
                   messages.isNotEmpty ? messages.last.dateTime : "";
               return Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const CircleAvatar(radius: 25),
+                  Stack(
+                    alignment: Alignment.bottomRight,
+                    children: [
+                      const CircleAvatar(radius: 25),
+                      Visibility(
+                        visible: BlocProvider.of<ChatPageCubit>(context).selectedChatList.contains(user),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: AppColors.lightThemeSecondaryColor,
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          padding: const EdgeInsets.all(3),
+                          child: const Icon(
+                            Icons.done,
+                            color: AppColors.whiteBackgroundColor,
+                            size: 15,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                   Expanded(
                     child: Container(
                       margin: const EdgeInsets.only(left: 10),
