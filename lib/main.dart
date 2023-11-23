@@ -29,7 +29,10 @@ class MyApp extends StatelessWidget {
             ..getSavedUser()
             ..getAllUsers(),
         ),
-        BlocProvider(create: (context) => di.injection<ChatPageCubit>()),
+        BlocProvider(
+          create: (context) =>
+              di.injection<ChatPageCubit>(),
+        ),
       ],
       child: MaterialApp(
         title: AppStrings.appTitle,

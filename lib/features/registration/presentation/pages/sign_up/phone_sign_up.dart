@@ -1,4 +1,3 @@
-import 'package:chat_app/config/routes/routes.dart';
 import 'package:chat_app/core/widgets/buttons.dart';
 import 'package:chat_app/features/registration/presentation/cubit/sign_up/sign_up_cubit.dart';
 import 'package:chat_app/features/registration/presentation/widgets/sign_up_widgets/sign_up_form.dart';

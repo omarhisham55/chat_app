@@ -40,3 +40,11 @@ class GetChatFailed extends ChatPageState {
   @override
   List<Object> get props => [msg];
 }
+
+class SelectedChatState extends ChatPageState {
+  final int list;
+  const SelectedChatState({required this.list});
+
+  @override
+  List<Object> get props => [list];
+}
