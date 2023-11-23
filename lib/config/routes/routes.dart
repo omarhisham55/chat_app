@@ -7,6 +7,7 @@ import 'package:chat_app/features/registration/presentation/pages/login/login.da
 import 'package:chat_app/features/registration/presentation/pages/sign_up/otp_verification.dart';
 import 'package:chat_app/features/registration/presentation/pages/sign_up/phone_sign_up.dart';
 import 'package:chat_app/features/registration/presentation/pages/sign_up/sign_up.dart';
+import 'package:chat_app/features/settings/presentation/pages/profile.dart';
 import 'package:chat_app/features/settings/presentation/pages/setting_details_pages/setting_details_page.dart';
 import 'package:chat_app/features/settings/presentation/pages/settings.dart';
 import 'package:chat_app/features/splash_screen/presentation/pages/splash_screen.dart';
@@ -24,6 +25,7 @@ class Routes {
   static const String loginRoute = "/login";
   static const String navigationRoute = "/navigation";
   static const String settingsRoute = "/settings";
+  static const String profileRoute = "/profile";
   static const String settingsDetailsRoute = "/settingsDetails";
   static const String intoChatRoute = "/intoChatDetails";
 
@@ -65,6 +67,10 @@ class Routes {
           ),
       settingsRoute: (settings) => MaterialPageRoute(
             builder: (context) => Settings(),
+            settings: settings,
+          ),
+      profileRoute: (settings) => MaterialPageRoute(
+            builder: (context) => const ProfilePage(),
             settings: settings,
           ),
       settingsDetailsRoute: (settings) => MaterialPageRoute(
