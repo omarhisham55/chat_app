@@ -1,7 +1,7 @@
 import 'package:chat_app/config/routes/routes.dart';
 import 'package:chat_app/core/utils/colors.dart';
 import 'package:chat_app/core/utils/strings.dart';
-import 'package:chat_app/features/welcome_page/presentation/cubit/welcome_page_cubit.dart';
+import 'package:chat_app/features/splash_screen/presentation/cubit/splash_screen_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -13,7 +13,7 @@ class Settings extends StatelessWidget {
     actions: const [Icon(Icons.search)],
   );
 
-  Widget _bodyHeader(_) => BlocBuilder<WelcomePageCubit, WelcomePageState>(
+  Widget _bodyHeader(_) => BlocBuilder<SplashScreenCubit, SplashScreenState>(
         builder: (context, state) {
           return Row(
             children: [
@@ -25,7 +25,7 @@ class Settings extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        BlocProvider.of<WelcomePageCubit>(_)
+                        BlocProvider.of<SplashScreenCubit>(_)
                             .userModel!
                             .username,
                         style: Theme.of(_)

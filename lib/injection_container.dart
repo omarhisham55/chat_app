@@ -3,7 +3,8 @@ import 'package:chat_app/core/network/network_info.dart';
 import 'package:chat_app/features/chat_page/chat_injection.dart';
 import 'package:chat_app/features/registration/registration_injection.dart';
 import 'package:chat_app/features/settings/settings_injection.dart';
-import 'package:chat_app/features/welcome_page/presentation/cubit/welcome_page_cubit.dart';
+import 'package:chat_app/features/splash_screen/presentation/cubit/splash_screen_cubit.dart';
+import 'package:chat_app/features/splash_screen/presentation/pages/splash_screen.dart';
 import 'package:chat_app/firebase_options.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -48,10 +49,13 @@ Future<void> init() async {
 
   //features
   injection.registerFactory(
-    () => WelcomePageCubit(
+    () => SplashScreenCubit(
       getSavedUserUsecase: injection(),
       getAllUsersUsecase: injection(),
     ),
+  );
+  injection.registerFactory(
+    () => SplashScreen(sharedPreferences: sharedPreferences),
   );
   registrationInjection();
   settingsInjection();

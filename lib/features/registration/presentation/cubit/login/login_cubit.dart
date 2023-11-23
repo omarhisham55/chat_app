@@ -1,7 +1,7 @@
 import 'package:chat_app/core/error/failure.dart';
 import 'package:chat_app/features/registration/domain/entities/user.dart';
 import 'package:chat_app/features/registration/domain/usecases/get_user.dart';
-import 'package:chat_app/features/welcome_page/presentation/cubit/welcome_page_cubit.dart';
+import 'package:chat_app/features/splash_screen/presentation/cubit/splash_screen_cubit.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -35,8 +35,8 @@ class LoginCubit extends Cubit<LoginState> {
     emit(response.fold(
       (failure) => const GetUserErrorState(msg: "get user failed"),
       (success) {
-        BlocProvider.of<WelcomePageCubit>(context).userModel = success;
-        BlocProvider.of<WelcomePageCubit>(context).allUsers.remove(success);
+        BlocProvider.of<SplashScreenCubit>(context).userModel = success;
+        BlocProvider.of<SplashScreenCubit>(context).allUsers.remove(success);
         return GetUserSuccessState(userModel: success);
       },
     ));

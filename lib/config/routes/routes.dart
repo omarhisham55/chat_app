@@ -9,6 +9,7 @@ import 'package:chat_app/features/registration/presentation/pages/sign_up/phone_
 import 'package:chat_app/features/registration/presentation/pages/sign_up/sign_up.dart';
 import 'package:chat_app/features/settings/presentation/pages/setting_details_pages/setting_details_page.dart';
 import 'package:chat_app/features/settings/presentation/pages/settings.dart';
+import 'package:chat_app/features/splash_screen/presentation/pages/splash_screen.dart';
 import 'package:chat_app/features/welcome_page/presentation/pages/welcome_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,6 +17,7 @@ import 'package:chat_app/injection_container.dart' as di;
 
 class Routes {
   static const String initialRoute = "/";
+  static const String welcomeRoute = "/welcome";
   static const String signUpRoute = "/signup";
   static const String signUpByPhoneRoute = "/phoneSignup";
   static const String otpVerificationRoute = "/otpVerificationRoute";
@@ -31,6 +33,10 @@ class Routes {
   Map<String, Route<dynamic> Function(RouteSettings settings)> get routes {
     return {
       initialRoute: (settings) => MaterialPageRoute(
+            builder: (context) => di.injection<SplashScreen>(),
+            settings: settings,
+          ),
+      welcomeRoute: (settings) => MaterialPageRoute(
             builder: (context) => const WelcomePage(),
             settings: settings,
           ),

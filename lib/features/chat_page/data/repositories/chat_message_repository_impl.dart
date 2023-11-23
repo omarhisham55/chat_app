@@ -1,10 +1,12 @@
 import 'package:chat_app/core/error/exception.dart';
 import 'package:chat_app/core/error/failure.dart';
 import 'package:chat_app/core/network/network_info.dart';
+import 'package:chat_app/core/utils/constants.dart';
 import 'package:chat_app/features/chat_page/data/datasources/chat_message_datasource.dart';
 import 'package:chat_app/features/chat_page/domain/entities/chat.dart';
 import 'package:chat_app/features/chat_page/domain/repositories/chat_messages_repository.dart';
 import 'package:dartz/dartz.dart';
+import 'package:flutter/material.dart';
 
 class ChatMessagesReopsitoryImpl implements ChatMessagesRepository {
   final NetworkInfo network;
@@ -31,6 +33,7 @@ class ChatMessagesReopsitoryImpl implements ChatMessagesRepository {
         return Left(ServerFailure());
       }
     } else {
+      Constants.showToast(msg: "network error", color: Colors.red);
       return Left(ServerFailure());
     }
   }

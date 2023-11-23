@@ -3,7 +3,7 @@ import 'package:chat_app/core/utils/colors.dart';
 import 'package:chat_app/features/chat_page/domain/entities/chat.dart';
 import 'package:chat_app/features/chat_page/presentation/cubit/chat_page_cubit.dart';
 import 'package:chat_app/features/registration/domain/entities/user.dart';
-import 'package:chat_app/features/welcome_page/presentation/cubit/welcome_page_cubit.dart';
+import 'package:chat_app/features/splash_screen/presentation/cubit/splash_screen_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -12,7 +12,7 @@ class ChatList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (BlocProvider.of<WelcomePageCubit>(context).allUsers.isEmpty) {
+    if (BlocProvider.of<SplashScreenCubit>(context).allUsers.isEmpty) {
       return Center(
         child: Text(
           "No Users found",
@@ -25,10 +25,10 @@ class ChatList extends StatelessWidget {
         physics: const NeverScrollableScrollPhysics(),
         itemBuilder: (context, index) => _chatListItem(
           context,
-          BlocProvider.of<WelcomePageCubit>(context).allUsers[index],
+          BlocProvider.of<SplashScreenCubit>(context).allUsers[index],
         ),
         separatorBuilder: (context, index) => const SizedBox(height: 10),
-        itemCount: BlocProvider.of<WelcomePageCubit>(context).allUsers.length,
+        itemCount: BlocProvider.of<SplashScreenCubit>(context).allUsers.length,
       );
     }
   }

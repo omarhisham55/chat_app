@@ -3,7 +3,7 @@ import 'package:chat_app/features/chat_page/domain/entities/chat.dart';
 import 'package:chat_app/features/chat_page/presentation/cubit/chat_page_cubit.dart';
 import 'package:chat_app/features/chat_page/presentation/widgets/chat_bubble.dart';
 import 'package:chat_app/features/registration/domain/entities/user.dart';
-import 'package:chat_app/features/welcome_page/presentation/cubit/welcome_page_cubit.dart';
+import 'package:chat_app/features/splash_screen/presentation/cubit/splash_screen_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -71,7 +71,7 @@ class IntoChat extends StatelessWidget {
               return ListView(
                 padding: const EdgeInsets.only(bottom: 70),
                 children: data.map<Widget>((chat) {
-                  if (BlocProvider.of<WelcomePageCubit>(context)
+                  if (BlocProvider.of<SplashScreenCubit>(context)
                           .userModel!
                           .id ==
                       chat.senderId) {

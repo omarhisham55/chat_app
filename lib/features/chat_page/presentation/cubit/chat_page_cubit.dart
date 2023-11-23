@@ -1,7 +1,6 @@
 import 'package:chat_app/features/chat_page/domain/entities/chat.dart';
 import 'package:chat_app/features/chat_page/domain/usecases/chat_message_usecase.dart';
-import 'package:chat_app/features/welcome_page/presentation/cubit/welcome_page_cubit.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:chat_app/features/splash_screen/presentation/cubit/splash_screen_cubit.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -25,7 +24,7 @@ class ChatPageCubit extends Cubit<ChatPageState> {
   }) async {
     if (messageController.text.isNotEmpty) {
       final response = await chatMessagesUseCase.call([
-        BlocProvider.of<WelcomePageCubit>(context).userModel!.id,
+        BlocProvider.of<SplashScreenCubit>(context).userModel!.id,
         receiverId,
         DateTime.now().toString(),
         messageController.text,
@@ -45,7 +44,7 @@ class ChatPageCubit extends Cubit<ChatPageState> {
     required String receiverId,
   }) async* {
     final response = await getChatMessagesUseCase.call([
-      BlocProvider.of<WelcomePageCubit>(context).userModel!.id,
+      BlocProvider.of<SplashScreenCubit>(context).userModel!.id,
       receiverId,
     ]);
     emit(
