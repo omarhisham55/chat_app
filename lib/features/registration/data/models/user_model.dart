@@ -1,34 +1,20 @@
-// ignore_for_file: overridden_fields
-
 import 'package:chat_app/features/registration/domain/entities/user.dart';
 
 class UserModel extends User {
-  @override
-  final String id;
-  @override
-  final String username;
-  @override
-  final String? email;
-  @override
-  final String? phoneNumber;
-
   const UserModel({
-    required this.id,
-    required this.username,
-    this.email,
-    this.phoneNumber,
-  }) : super(
-          id: id,
-          username: username,
-          email: email,
-          phoneNumber: phoneNumber,
-        );
+    required super.id,
+    required super.username,
+    super.email,
+    super.phoneNumber,
+    super.profileImage,
+  });
 
   factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
         id: json["id"],
         username: json["username"],
         email: json["email"],
         phoneNumber: json["phoneNumber"],
+        profileImage: json["profileImage"],
       );
 
   Map<String, dynamic> toMap() => {
@@ -36,5 +22,6 @@ class UserModel extends User {
         "username": username,
         "email": email,
         "phoneNumber": phoneNumber,
+        "ProfileImage": profileImage,
       };
 }
