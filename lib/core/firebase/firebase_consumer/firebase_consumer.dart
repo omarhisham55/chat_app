@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:chat_app/core/error/exception.dart';
 import 'package:chat_app/core/firebase/firebase_auth/firebase_auth.dart';
 import 'package:chat_app/core/firebase/firebase_auth/firebase_messaging.dart';
@@ -7,6 +9,7 @@ import 'package:chat_app/features/chat_page/domain/entities/chat.dart';
 import 'package:chat_app/features/registration/data/models/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
 class FirebaseAuthConsumer implements FirebaseAuthentication {
@@ -225,5 +228,18 @@ class FirebaseConsumer implements FirebaseMessaging {
               .map((doc) => ChatModel.fromJson(doc.data()))
               .toList(),
         );
+  }
+}
+
+class FirebaseConsumerStorage implements FirebaseStore {
+  final FirebaseStorage firebaseStorage;
+
+  FirebaseConsumerStorage({required this.firebaseStorage});
+  @override
+  Future<UploadTask> storeProfileImage({required File file}) async {
+    return firebaseStorage
+        .ref()
+        .child("users/${Uri.file(file.path).pathSegments.last}")
+        .putFile(file);
   }
 }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 ThemeData lightTheme() => ThemeData(
+      scaffoldBackgroundColor: AppColors.whiteBackgroundColor,
       appBarTheme: AppBarTheme(
         backgroundColor: AppColors.lightThemePrimaryColor,
         systemOverlayStyle: SystemUiOverlayStyle(

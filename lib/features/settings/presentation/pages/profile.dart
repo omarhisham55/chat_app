@@ -1,4 +1,6 @@
+import 'package:chat_app/features/settings/presentation/cubit/settings_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -22,7 +24,8 @@ class ProfilePage extends StatelessWidget {
                   CircleAvatar(
                     radius: 25,
                     child: IconButton(
-                      onPressed: () {},
+                      onPressed: () => BlocProvider.of<SettingsCubit>(_)
+                          .selectProfileImage(),
                       splashRadius: 25,
                       icon: const Icon(Icons.camera_alt),
                     ),

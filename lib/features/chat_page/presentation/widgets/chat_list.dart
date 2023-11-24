@@ -1,9 +1,12 @@
 import 'package:chat_app/config/routes/routes.dart';
 import 'package:chat_app/core/utils/colors.dart';
+import 'package:chat_app/core/widgets/connection_error_page.dart';
+import 'package:chat_app/core/widgets/indicator.dart';
 import 'package:chat_app/features/chat_page/domain/entities/chat.dart';
 import 'package:chat_app/features/chat_page/presentation/cubit/chat_page_cubit.dart';
 import 'package:chat_app/features/registration/domain/entities/user.dart';
 import 'package:chat_app/features/splash_screen/presentation/cubit/splash_screen_cubit.dart';
+import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -14,36 +17,47 @@ class ChatList extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ChatPageCubit, ChatPageState>(
       builder: (context, state) {
-        if (SplashScreenCubit.allUsers.isEmpty) {
-          return Center(
-            child: Text(
-              "No Users found",
-              style: Theme.of(context).textTheme.headlineSmall,
-            ),
-          );
-        } else {
-          return ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemBuilder: (context, index) => _chatListItem(
-              context: context,
-              user: SplashScreenCubit.allUsers[index],
-              focusColor: BlocProvider.of<ChatPageCubit>(context)
-                  .chatBackgroundColor[index],
-              onLongPress: () =>
-                  BlocProvider.of<ChatPageCubit>(context).selectedChat(
-                index,
-                SplashScreenCubit.allUsers[index],
-              ),
-              onTapDuringLongPress: () =>
-                  BlocProvider.of<ChatPageCubit>(context).removeSelectedChat(
-                index,
-                SplashScreenCubit.allUsers[index],
-              ),
-            ),
-            itemCount: SplashScreenCubit.allUsers.length,
-          );
-        }
+        return ConditionalBuilder(
+          condition: state is LoadingGetSavedUserState ||
+              state is LoadingGetAllUsersState,
+          builder: (context) {
+            if (SplashScreenCubit.allUsers.isEmpty) {
+              return Center(
+                child: Text(
+                  "No Users found",
+                  style: Theme.of(context).textTheme.headlineSmall,
+                ),
+              );
+            } else if (state is GetSavedUserErrorState ||
+                state is GetAllUsersErrorState) {
+              return const ConnectionErrorPage();
+            } else {
+              return ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemBuilder: (context, index) => _chatListItem(
+                  context: context,
+                  user: SplashScreenCubit.allUsers[index],
+                  focusColor: BlocProvider.of<ChatPageCubit>(context)
+                      .chatBackgroundColor[index],
+                  onLongPress: () =>
+                      BlocProvider.of<ChatPageCubit>(context).selectedChat(
+                    index,
+                    SplashScreenCubit.allUsers[index],
+                  ),
+                  onTapDuringLongPress: () =>
+                      BlocProvider.of<ChatPageCubit>(context)
+                          .removeSelectedChat(
+                    index,
+                    SplashScreenCubit.allUsers[index],
+                  ),
+                ),
+                itemCount: SplashScreenCubit.allUsers.length,
+              );
+            }
+          },
+          fallback: (context) => const LoadingIndicator(),
+        );
       },
     );
   }
@@ -92,7 +106,9 @@ class ChatList extends StatelessWidget {
                     children: [
                       const CircleAvatar(radius: 25),
                       Visibility(
-                        visible: BlocProvider.of<ChatPageCubit>(context).selectedChatList.contains(user),
+                        visible: BlocProvider.of<ChatPageCubit>(context)
+                            .selectedChatList
+                            .contains(user),
                         child: Container(
                           decoration: BoxDecoration(
                             color: AppColors.lightThemeSecondaryColor,

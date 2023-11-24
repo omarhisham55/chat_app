@@ -4,6 +4,7 @@ import 'package:chat_app/config/theme/themes.dart';
 import 'package:chat_app/core/utils/strings.dart';
 import 'package:chat_app/features/chat_page/presentation/cubit/chat_page_cubit.dart';
 import 'package:chat_app/features/registration/presentation/cubit/sign_up/sign_up_cubit.dart';
+import 'package:chat_app/features/settings/presentation/cubit/settings_cubit.dart';
 import 'package:chat_app/features/splash_screen/presentation/cubit/splash_screen_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,15 +24,15 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => di.injection<SignUpCubit>()),
         BlocProvider(
           create: (context) => di.injection<SplashScreenCubit>()
             ..getSavedUser()
             ..getAllUsers(),
         ),
+        BlocProvider(create: (context) => di.injection<SignUpCubit>()),
+        BlocProvider(create: (context) => di.injection<SettingsCubit>()),
         BlocProvider(
-          create: (context) =>
-              di.injection<ChatPageCubit>(),
+          create: (context) => di.injection<ChatPageCubit>(),
         ),
       ],
       child: MaterialApp(

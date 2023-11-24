@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 abstract class FirebaseAuthentication {
   Future<UserCredential> emailAuthentication({
@@ -14,4 +17,8 @@ abstract class FirebaseAuthentication {
     required String password,
   });
   Future<DocumentSnapshot<Map<String, dynamic>>> getLoggedInUser(String id);
+}
+
+abstract class FirebaseStore {
+  Future<UploadTask> storeProfileImage({required File file});
 }
