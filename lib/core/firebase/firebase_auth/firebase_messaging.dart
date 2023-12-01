@@ -1,4 +1,5 @@
 import 'package:chat_app/features/chat_page/domain/entities/chat.dart';
+import 'package:chat_app/features/registration/domain/entities/user.dart';
 
 abstract class FirebaseMessaging {
   Future<void> sendMessages({
@@ -11,4 +12,6 @@ abstract class FirebaseMessaging {
     required String senderId,
     required String receiverId,
   });
+  Future<bool> addToArchive({required List<User> archivedUsers});
+  Future<bool> removeChat({required List<User> removedUsers});
 }

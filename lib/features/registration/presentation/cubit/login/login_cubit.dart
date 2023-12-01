@@ -20,7 +20,7 @@ class LoginCubit extends Cubit<LoginState> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
-  bool obscure = false;
+  bool obscure = true;
   void changeObscure() {
     obscure = !obscure;
     emit(ChangeObscure(obscure));
@@ -37,7 +37,7 @@ class LoginCubit extends Cubit<LoginState> {
       (success) {
         SplashScreenCubit.userModel = success;
         BlocProvider.of<SplashScreenCubit>(context).getAllUsers();
-        SplashScreenCubit.allUsers.remove(success);
+        SplashScreenCubit.allUsers!.remove(success);
         return GetUserSuccessState(userModel: success);
       },
     ));

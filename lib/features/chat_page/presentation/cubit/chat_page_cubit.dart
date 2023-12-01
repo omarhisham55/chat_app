@@ -11,10 +11,12 @@ part 'chat_page_state.dart';
 class ChatPageCubit extends Cubit<ChatPageState> {
   final SendChatMessagesUseCase chatMessagesUseCase;
   final GetChatMessagesUseCase getChatMessagesUseCase;
+  final AddToArchiveUsecase addToArchiveUsecase;
   List<Chat> messages = [];
   ChatPageCubit({
     required this.chatMessagesUseCase,
     required this.getChatMessagesUseCase,
+    required this.addToArchiveUsecase,
   }) : super(ChatPageInitial());
 
   TextEditingController messageController = TextEditingController();
@@ -75,8 +77,8 @@ class ChatPageCubit extends Cubit<ChatPageState> {
   // }
 
   List<User> selectedChatList = [];
-  List<bool> chatBackgroundColor = List.generate(
-    SplashScreenCubit.allUsers.length,
+  late List<bool> chatBackgroundColor = List.generate(
+    SplashScreenCubit.allUsers!.length,
     (index) => false,
   );
   void selectedChat(int index, User user) {
@@ -97,6 +99,28 @@ class ChatPageCubit extends Cubit<ChatPageState> {
       chatBackgroundColor[index] = true;
       selectedChatList.add(user);
     }
+
     emit(SelectedChatState(list: selectedChatList.length));
+  }
+
+  void clearAllSelectedChat() {
+    selectedChatList.clear();
+    for (int i = 0; i < chatBackgroundColor.length; i++) {
+      chatBackgroundColor[i] = false;
+    }
+    emit(const SelectedChatState(list: 0));
+  }
+
+  List<User> archived = [];
+  Future<void> addToArchive() async {
+    archived = selectedChatList;
+    final response = await addToArchiveUsecase.call(selectedChatList);
+    response.fold(
+      (l) => const AddToArchiveFailed(),
+      (r) async {
+        clearAllSelectedChat();
+        return AddToArchiveSuccess(await r);
+      },
+    );
   }
 }

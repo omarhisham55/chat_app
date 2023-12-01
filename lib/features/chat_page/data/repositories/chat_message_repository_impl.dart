@@ -5,6 +5,7 @@ import 'package:chat_app/core/utils/constants.dart';
 import 'package:chat_app/features/chat_page/data/datasources/chat_message_datasource.dart';
 import 'package:chat_app/features/chat_page/domain/entities/chat.dart';
 import 'package:chat_app/features/chat_page/domain/repositories/chat_messages_repository.dart';
+import 'package:chat_app/features/registration/domain/entities/user.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 
@@ -59,6 +60,18 @@ class ChatMessagesReopsitoryImpl implements ChatMessagesRepository {
         return Left(ServerFailure());
       }
     } else {
+      return Left(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, Future<bool>>> addToArchive(
+      {required List<User> archivedUsers}) async {
+    try {
+      return Right(
+        chatMessageDatasource.addToArchive(archivedUsers: archivedUsers),
+      );
+    } on ServerException {
       return Left(ServerFailure());
     }
   }

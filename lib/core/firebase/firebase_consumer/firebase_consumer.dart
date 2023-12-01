@@ -7,6 +7,7 @@ import 'package:chat_app/core/utils/constants.dart';
 import 'package:chat_app/features/chat_page/data/models/chat_model.dart';
 import 'package:chat_app/features/chat_page/domain/entities/chat.dart';
 import 'package:chat_app/features/registration/data/models/user_model.dart';
+import 'package:chat_app/features/splash_screen/presentation/cubit/splash_screen_cubit.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -41,7 +42,7 @@ class FirebaseAuthConsumer implements FirebaseAuthentication {
       );
       return response;
     } on FirebaseAuthException catch (error) {
-      return Future.error(_handleFirebaseException(error));
+      return Future.error(_handleFirebaseException(error: error));
     }
   }
 
@@ -67,7 +68,7 @@ class FirebaseAuthConsumer implements FirebaseAuthentication {
           email: email, password: password);
       return getLoggedInUser(user.user!.uid);
     } on FirebaseAuthException catch (error) {
-      return Future.error(_handleFirebaseException(error));
+      return Future.error(_handleFirebaseException(error: error));
     }
   }
 
@@ -82,7 +83,7 @@ class FirebaseAuthConsumer implements FirebaseAuthentication {
           await client.signInWithCredential(phoneAuthCredential);
         },
         verificationFailed: (FirebaseAuthException error) {
-          _handleFirebaseException(error);
+          _handleFirebaseException(error: error);
           debugPrint("zaza ${error.code}");
         },
         codeSent: (String verificationId, int? forceResendingToken) async {
@@ -92,7 +93,7 @@ class FirebaseAuthConsumer implements FirebaseAuthentication {
       );
       return true;
     } on FirebaseAuthException catch (error) {
-      _handleFirebaseException(error);
+      _handleFirebaseException(error: error);
       debugPrint("hamo ${error.code}");
       return false;
     }
@@ -116,11 +117,16 @@ class FirebaseAuthConsumer implements FirebaseAuthentication {
   }
 
   Future<QuerySnapshot<Map<String, dynamic>>> getAllUsers() async {
-    return await firebsaeData.collection("users").get();
+    try {
+      return await firebsaeData.collection("users").get();
+    } on FirebaseException catch (error) {
+      return Future.error(_handleFirebaseException(e: error));
+    }
   }
 
-  dynamic _handleFirebaseException(FirebaseAuthException error) {
-    switch (error.code) {
+  static dynamic _handleFirebaseException(
+      {FirebaseAuthException? error, FirebaseException? e}) {
+    switch (error!.code) {
       case "INVALID_LOGIN_CREDENTIALS":
         Constants.showToast(
           msg: const InvalidLoginCredentials().msg!,
@@ -167,6 +173,14 @@ class FirebaseAuthConsumer implements FirebaseAuthentication {
           color: Colors.red,
         );
         throw const UnknownError();
+    }
+    switch (e!.code) {
+      case "UNAVAILABLE":
+        Constants.showToast(
+          msg: const ConnectionError().msg!,
+          color: Colors.red,
+        );
+        throw const ConnectionError();
     }
   }
 }
@@ -215,19 +229,76 @@ class FirebaseConsumer implements FirebaseMessaging {
     required String senderId,
     required String receiverId,
   }) {
-    return firebaseFirestore
-        .collection("users")
-        .doc(senderId)
-        .collection("chats")
-        .doc(receiverId)
-        .collection("messages")
-        .orderBy("dateTime")
-        .snapshots()
-        .map(
-          (querySnapshot) => querySnapshot.docs
-              .map((doc) => ChatModel.fromJson(doc.data()))
-              .toList(),
-        );
+    try {
+      return firebaseFirestore
+          .collection("users")
+          .doc(senderId)
+          .collection("chats")
+          .doc(receiverId)
+          .collection("messages")
+          .orderBy("dateTime")
+          .snapshots()
+          .map(
+            (querySnapshot) => querySnapshot.docs
+                .map((doc) => ChatModel.fromJson(doc.data()))
+                .toList(),
+          );
+    } on FirebaseException catch (error) {
+      return FirebaseAuthConsumer._handleFirebaseException(e: error);
+    }
+  }
+
+  @override
+  Future<bool> removeChat({required removedUsers}) async {
+    for (var user in removedUsers) {
+      final List<Chat> models = await getMessages(
+        senderId: SplashScreenCubit.userModel!.id,
+        receiverId: user.id,
+      ).last;
+      for (var i = 0; i < models.length; i++) {
+        firebaseFirestore
+            .collection("users")
+            .doc(SplashScreenCubit.userModel!.id)
+            .collection("chats")
+            .doc(user.id)
+            .delete()
+            .then((value) => true);
+      }
+    }
+    return false;
+  }
+
+  bool tryT = false;
+  @override
+  Future<bool> addToArchive({required archivedUsers}) async {
+    try {
+      for (var user in archivedUsers) {
+        final List<Chat> models = await getMessages(
+          senderId: SplashScreenCubit.userModel!.id,
+          receiverId: user.id,
+        ).last;
+        for (var i = 0; i < models.length; i++) {
+          ChatModel chatModel = ChatModel(
+            senderId: models[i].senderId,
+            receiverId: models[i].receiverId,
+            dateTime: models[i].dateTime,
+            message: models[i].message,
+          );
+          await firebaseFirestore
+              .collection("users")
+              .doc(SplashScreenCubit.userModel!.id)
+              .collection("archivedChat")
+              .doc(user.id)
+              .collection("archivedMessages")
+              .add(chatModel.toMap())
+              .then((value) => tryT = true);
+        }
+      }
+      // await removeChat(removedUsers: archivedUsers);
+      return tryT;
+    } catch (error) {
+      return false;
+    }
   }
 }
 

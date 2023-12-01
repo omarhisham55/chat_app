@@ -1,8 +1,10 @@
 import 'package:chat_app/config/routes/routes.dart';
 import 'package:chat_app/core/utils/strings.dart';
+import 'package:chat_app/features/chat_page/presentation/cubit/chat_page_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-SliverAppBar navigationAppbar(context) {
+SliverAppBar navigationAppbar(context, PreferredSize bottom) {
   List<PopupMenuEntry<String>> popUpMenuEntries =
       SettingStrings.settingsNavigationAppbar
           .map(
@@ -23,6 +25,8 @@ SliverAppBar navigationAppbar(context) {
     pinned: false,
     floating: false,
     snap: false,
+    bottom: bottom,
+    elevation: 0.0,
     actions: [
       IconButton.outlined(
         onPressed: () {},
@@ -40,11 +44,51 @@ SliverAppBar navigationAppbar(context) {
           context,
           switch (value) {
             "Settings" => Routes.settingsRoute,
-            String() => null,
-          }!,
+            String() => '',
+          },
         ),
         splashRadius: 25,
         itemBuilder: (BuildContext context) => popUpMenuEntries,
+      ),
+    ],
+  );
+}
+
+SliverAppBar toArchiveAppbar(context, PreferredSize bottom) {
+  return SliverAppBar(
+    pinned: true,
+    leading: IconButton(
+      onPressed: () =>
+          BlocProvider.of<ChatPageCubit>(context).clearAllSelectedChat(),
+      icon: Icon(Icons.adaptive.arrow_back_rounded),
+    ),
+    title: Text(
+      BlocProvider.of<ChatPageCubit>(context)
+          .selectedChatList
+          .length
+          .toString(),
+    ),
+    bottom: bottom,
+    actions: [
+      IconButton(
+        onPressed: () {},
+        icon: const Icon(Icons.push_pin),
+      ),
+      IconButton(
+        onPressed: () {},
+        icon: const Icon(Icons.delete),
+      ),
+      IconButton(
+        onPressed: () {},
+        icon: const Icon(Icons.volume_off),
+      ),
+      IconButton(
+        onPressed: () => BlocProvider.of<ChatPageCubit>(context).addToArchive(),
+        icon: const Icon(Icons.archive),
+      ),
+      IconButton(
+        onPressed: () {},
+        icon: Icon(Icons.adaptive.more),
       ),
     ],
   );

@@ -43,3 +43,7 @@ class TooManyRequests extends ServerException {
 class UnknownError extends ServerException {
   const UnknownError([msg]) : super("Unknown error $msg");
 }
+
+class ConnectionError extends ServerException {
+  const ConnectionError([msg]) : super("Connection error");
+}

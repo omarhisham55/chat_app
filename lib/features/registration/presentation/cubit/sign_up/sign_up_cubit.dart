@@ -29,7 +29,7 @@ class SignUpCubit extends Cubit<SignUpState> {
   List<TextEditingController> otps =
       List.generate(6, (index) => TextEditingController());
 
-  bool obscure = false;
+  bool obscure = true;
   void changeObscure() {
     obscure = !obscure;
     emit(ChangeObscure(obscure));

@@ -41,6 +41,22 @@ class GetChatFailed extends ChatPageState {
   List<Object> get props => [msg];
 }
 
+class AddToArchiveSuccess extends ChatPageState {
+  final bool msg;
+  const AddToArchiveSuccess(this.msg);
+
+  @override
+  List<Object> get props => [msg];
+}
+
+class AddToArchiveFailed extends ChatPageState {
+  final String msg;
+  const AddToArchiveFailed({this.msg = "users failed to archive"});
+
+  @override
+  List<Object> get props => [msg];
+}
+
 class SelectedChatState extends ChatPageState {
   final int list;
   const SelectedChatState({required this.list});

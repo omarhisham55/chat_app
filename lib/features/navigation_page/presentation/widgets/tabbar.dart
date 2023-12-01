@@ -1,15 +1,16 @@
 import 'package:chat_app/core/utils/colors.dart';
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class NavigationTabbar extends StatefulWidget {
+  TabController tabController;
   final int length;
   final List<String> tabTitles;
-  final List<Widget> tabBodies;
-  const NavigationTabbar({
+  NavigationTabbar({
     super.key,
+    required this.tabController,
     required this.length,
     required this.tabTitles,
-    required this.tabBodies,
   });
 
   @override
@@ -18,48 +19,31 @@ class NavigationTabbar extends StatefulWidget {
 
 class _NavigationTabbarState extends State<NavigationTabbar>
     with SingleTickerProviderStateMixin {
-  late TabController _tabController;
-
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: widget.length, vsync: this);
+    widget.tabController = TabController(length: widget.length, vsync: this);
   }
 
   @override
   void dispose() {
     super.dispose();
-    _tabController.dispose();
+    widget.tabController.dispose();
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: null,
-        leading: null,
-        actions: null,
-        toolbarHeight: 0,
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(kToolbarHeight),
-          child: TabBar(
-            controller: _tabController,
-            indicatorColor: AppColors.whiteBackgroundColor,
-            indicatorWeight: 4,
-            tabs: List.generate(
-              widget.length,
-              (index) => Tab(
-                text: widget.tabTitles[index],
-              ),
-            ),
-          ),
-        ),
-      ),
-      body: TabBarView(
-        controller: _tabController,
-        children: List.generate(
+  PreferredSize build(BuildContext context) {
+    return PreferredSize(
+      preferredSize: const Size.fromHeight(kTextTabBarHeight),
+      child: TabBar(
+        controller: widget.tabController,
+        indicatorColor: AppColors.whiteBackgroundColor,
+        indicatorWeight: 4,
+        tabs: List.generate(
           widget.length,
-          (index) => widget.tabBodies[index],
+          (index) => Tab(
+            text: widget.tabTitles[index],
+          ),
         ),
       ),
     );

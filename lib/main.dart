@@ -3,6 +3,7 @@ import 'package:chat_app/config/routes/routes.dart';
 import 'package:chat_app/config/theme/themes.dart';
 import 'package:chat_app/core/utils/strings.dart';
 import 'package:chat_app/features/chat_page/presentation/cubit/chat_page_cubit.dart';
+import 'package:chat_app/features/navigation_page/presentation/cubit/navigationpage_cubit.dart';
 import 'package:chat_app/features/registration/presentation/cubit/sign_up/sign_up_cubit.dart';
 import 'package:chat_app/features/settings/presentation/cubit/settings_cubit.dart';
 import 'package:chat_app/features/splash_screen/presentation/cubit/splash_screen_cubit.dart';
@@ -30,6 +31,7 @@ class MyApp extends StatelessWidget {
             ..getAllUsers(),
         ),
         BlocProvider(create: (context) => di.injection<SignUpCubit>()),
+        BlocProvider(create: (context) => di.injection<NavigationpageCubit>()),
         BlocProvider(create: (context) => di.injection<SettingsCubit>()),
         BlocProvider(
           create: (context) => di.injection<ChatPageCubit>(),

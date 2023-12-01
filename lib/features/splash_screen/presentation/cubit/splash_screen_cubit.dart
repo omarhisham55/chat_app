@@ -12,7 +12,7 @@ class SplashScreenCubit extends Cubit<SplashScreenState> {
   GetSavedUserUsecase getSavedUserUsecase;
   GetAllUsersUsecase getAllUsersUsecase;
   static User? userModel;
-  static List<User> allUsers = [];
+  static List<User>? allUsers;
   SplashScreenCubit({
     required this.getSavedUserUsecase,
     required this.getAllUsersUsecase,

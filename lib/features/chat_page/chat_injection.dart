@@ -9,9 +9,9 @@ Future<void> chatInjection() async {
   //cubit
   injection.registerFactory(
     () => ChatPageCubit(
-      chatMessagesUseCase: injection(),
-      getChatMessagesUseCase: injection(),
-    ),
+        chatMessagesUseCase: injection(),
+        getChatMessagesUseCase: injection(),
+        addToArchiveUsecase: injection()),
   );
   //datasource
   injection.registerLazySingleton<ChatMessageDatasource>(
@@ -30,5 +30,8 @@ Future<void> chatInjection() async {
   );
   injection.registerLazySingleton(
     () => GetChatMessagesUseCase(chatMessagesRepository: injection()),
+  );
+  injection.registerLazySingleton(
+    () => AddToArchiveUsecase(chatMessagesRepository: injection()),
   );
 }

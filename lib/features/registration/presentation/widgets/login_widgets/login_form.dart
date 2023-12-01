@@ -34,7 +34,7 @@ class LoginForm extends StatelessWidget {
                 suffix: IconButton(
                   onPressed: () => get.changeObscure(),
                   icon: Icon(
-                    get.obscure
+                    !get.obscure
                         ? Icons.remove_red_eye_outlined
                         : Icons.remove_red_eye,
                   ),

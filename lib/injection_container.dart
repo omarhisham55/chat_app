@@ -2,6 +2,7 @@ import 'package:chat_app/core/firebase/firebase_auth/firebase_auth.dart';
 import 'package:chat_app/core/firebase/firebase_consumer/firebase_consumer.dart';
 import 'package:chat_app/core/network/network_info.dart';
 import 'package:chat_app/features/chat_page/chat_injection.dart';
+import 'package:chat_app/features/navigation_page/presentation/cubit/navigationpage_cubit.dart';
 import 'package:chat_app/features/registration/registration_injection.dart';
 import 'package:chat_app/features/settings/settings_injection.dart';
 import 'package:chat_app/features/splash_screen/presentation/cubit/splash_screen_cubit.dart';
@@ -25,8 +26,7 @@ Future<void> init() async {
     ),
   );
   injection.registerLazySingleton<FirebaseAuth>(() => FirebaseAuth.instance);
-  injection.registerLazySingleton(
-      () => fbs.FirebaseStorage.instance);
+  injection.registerLazySingleton(() => fbs.FirebaseStorage.instance);
   injection.registerLazySingleton<FirebaseFirestore>(
     () => FirebaseFirestore.instance,
   );

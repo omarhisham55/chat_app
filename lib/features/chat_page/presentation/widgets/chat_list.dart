@@ -18,17 +18,11 @@ class ChatList extends StatelessWidget {
     return BlocBuilder<ChatPageCubit, ChatPageState>(
       builder: (context, state) {
         return ConditionalBuilder(
-          condition: state is LoadingGetSavedUserState ||
-              state is LoadingGetAllUsersState,
+          condition: state is! LoadingGetSavedUserState ||
+              state is! LoadingGetAllUsersState ||
+              SplashScreenCubit.allUsers != null,
           builder: (context) {
-            if (SplashScreenCubit.allUsers.isEmpty) {
-              return Center(
-                child: Text(
-                  "No Users found",
-                  style: Theme.of(context).textTheme.headlineSmall,
-                ),
-              );
-            } else if (state is GetSavedUserErrorState ||
+            if (state is GetSavedUserErrorState ||
                 state is GetAllUsersErrorState) {
               return const ConnectionErrorPage();
             } else {
@@ -37,22 +31,22 @@ class ChatList extends StatelessWidget {
                 physics: const NeverScrollableScrollPhysics(),
                 itemBuilder: (context, index) => _chatListItem(
                   context: context,
-                  user: SplashScreenCubit.allUsers[index],
+                  user: SplashScreenCubit.allUsers![index],
                   focusColor: BlocProvider.of<ChatPageCubit>(context)
                       .chatBackgroundColor[index],
                   onLongPress: () =>
                       BlocProvider.of<ChatPageCubit>(context).selectedChat(
                     index,
-                    SplashScreenCubit.allUsers[index],
+                    SplashScreenCubit.allUsers![index],
                   ),
                   onTapDuringLongPress: () =>
                       BlocProvider.of<ChatPageCubit>(context)
                           .removeSelectedChat(
                     index,
-                    SplashScreenCubit.allUsers[index],
+                    SplashScreenCubit.allUsers![index],
                   ),
                 ),
-                itemCount: SplashScreenCubit.allUsers.length,
+                itemCount: SplashScreenCubit.allUsers!.length,
               );
             }
           },

@@ -2,6 +2,7 @@ import 'package:chat_app/core/error/failure.dart';
 import 'package:chat_app/core/usecases/usecase.dart';
 import 'package:chat_app/features/chat_page/domain/entities/chat.dart';
 import 'package:chat_app/features/chat_page/domain/repositories/chat_messages_repository.dart';
+import 'package:chat_app/features/registration/domain/entities/user.dart';
 import 'package:dartz/dartz.dart';
 
 class SendChatMessagesUseCase extends UseCase<void, List<String>> {
@@ -28,4 +29,14 @@ class GetChatMessagesUseCase extends UseCase<Stream<List<Chat>>, List<String>> {
         senderId: params[0],
         receiverId: params[1],
       );
+}
+
+class AddToArchiveUsecase extends UseCase<Future<bool>, List<User>> {
+  final ChatMessagesRepository chatMessagesRepository;
+
+  AddToArchiveUsecase({required this.chatMessagesRepository});
+  @override
+  Future<Either<Failure, Future<bool>>> call(List<User> params) async {
+    return await chatMessagesRepository.addToArchive(archivedUsers: params);
+  }
 }

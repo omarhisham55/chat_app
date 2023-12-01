@@ -1,7 +1,9 @@
 import 'package:chat_app/core/utils/colors.dart';
 import 'package:chat_app/core/utils/strings.dart';
+import 'package:chat_app/features/chat_page/presentation/cubit/chat_page_cubit.dart';
 import 'package:chat_app/features/chat_page/presentation/widgets/chat_list.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ChatPage extends StatelessWidget {
   const ChatPage({super.key});
@@ -28,12 +30,24 @@ class ChatPage extends StatelessWidget {
                 ),
               ),
             ),
-            Text(
-              "4",
-              style: Theme.of(context)
-                  .textTheme
-                  .titleSmall!
-                  .copyWith(color: AppColors.lightThemeSecondaryColor),
+            BlocBuilder<ChatPageCubit, ChatPageState>(
+              builder: (context, state) {
+                return Visibility(
+                  visible: BlocProvider.of<ChatPageCubit>(context)
+                      .archived
+                      .isNotEmpty,
+                  child: Text(
+                    BlocProvider.of<ChatPageCubit>(context)
+                        .archived
+                        .length
+                        .toString(),
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleSmall!
+                        .copyWith(color: AppColors.lightThemeSecondaryColor),
+                  ),
+                );
+              },
             ),
           ],
         ),

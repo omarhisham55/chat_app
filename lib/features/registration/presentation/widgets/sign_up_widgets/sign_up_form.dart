@@ -52,7 +52,7 @@ class SignUpForm extends StatelessWidget {
                 suffix: IconButton(
                   onPressed: () => controller.changeObscure(),
                   icon: Icon(
-                    controller.obscure
+                    !controller.obscure
                         ? Icons.remove_red_eye_outlined
                         : Icons.remove_red_eye,
                   ),
