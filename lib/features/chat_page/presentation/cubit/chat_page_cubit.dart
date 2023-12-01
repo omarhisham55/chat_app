@@ -1,11 +1,12 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:chat_app/features/chat_page/domain/entities/chat.dart';
 import 'package:chat_app/features/chat_page/domain/usecases/chat_message_usecase.dart';
 import 'package:chat_app/features/registration/domain/entities/user.dart';
 import 'package:chat_app/features/splash_screen/presentation/cubit/splash_screen_cubit.dart';
+import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 part 'chat_page_state.dart';
 
 class ChatPageCubit extends Cubit<ChatPageState> {
@@ -64,17 +65,20 @@ class ChatPageCubit extends Cubit<ChatPageState> {
     yield messages;
   }
 
-  // void getAllChatMessages(context) {
-  //   for (int i = 0;
-  //       i < BlocProvider.of<SplashScreenCubit>(context).allUsers.length - 1;
-  //       i++) {
-  //     BlocProvider.of<ChatPageCubit>(context).getChat(
-  //       context: context,
-  //       receiverId: BlocProvider.of<SplashScreenCubit>(context).allUsers[i].id,
-  //     );
-  //     print('sha8al');
-  //   }
-  // }
+  List<Chat> lastMessages = [];
+  Stream<List<Chat>> getAllChatMessages(context) {
+    Future.delayed(const Duration(seconds: 2));
+    for (int i = 0; i < SplashScreenCubit.allUsers!.length - 1; i++) {
+      getChat(
+        context: context,
+        receiverId: SplashScreenCubit.allUsers![i].id,
+      ).last.then((value) => lastMessages.add(value.last));
+      print('sha8al $i');
+      print(lastMessages);
+    }
+    emit(GetChatSuccess(DateTime.now().millisecond));
+    return Stream.value(lastMessages);
+  }
 
   List<User> selectedChatList = [];
   late List<bool> chatBackgroundColor = List.generate(
@@ -113,7 +117,7 @@ class ChatPageCubit extends Cubit<ChatPageState> {
 
   List<User> archived = [];
   Future<void> addToArchive() async {
-    archived = selectedChatList;
+    // archived = selectedChatList;
     final response = await addToArchiveUsecase.call(selectedChatList);
     response.fold(
       (l) => const AddToArchiveFailed(),

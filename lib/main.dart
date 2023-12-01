@@ -26,6 +26,9 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
+          create: (context) => di.injection<ChatPageCubit>(),
+        ),
+        BlocProvider(
           create: (context) => di.injection<SplashScreenCubit>()
             ..getSavedUser()
             ..getAllUsers(),
@@ -33,9 +36,6 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => di.injection<SignUpCubit>()),
         BlocProvider(create: (context) => di.injection<NavigationpageCubit>()),
         BlocProvider(create: (context) => di.injection<SettingsCubit>()),
-        BlocProvider(
-          create: (context) => di.injection<ChatPageCubit>(),
-        ),
       ],
       child: MaterialApp(
         title: AppStrings.appTitle,

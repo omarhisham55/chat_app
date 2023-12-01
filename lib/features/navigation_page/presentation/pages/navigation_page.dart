@@ -3,6 +3,7 @@ import 'package:chat_app/core/utils/strings.dart';
 import 'package:chat_app/features/chat_page/presentation/cubit/chat_page_cubit.dart';
 import 'package:chat_app/features/chat_page/presentation/pages/chat.dart';
 import 'package:chat_app/features/navigation_page/presentation/widgets/navigation_appbar.dart';
+import 'package:chat_app/features/updates/presentation/pages/record_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -58,7 +59,7 @@ class _NavigationPageState extends State<NavigationPage>
               controller: _tabController,
               children: [
                 ChatPage(),
-                ChatPage(),
+                RecordTest(),
                 ChatPage(),
               ],
             ),

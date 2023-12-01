@@ -59,10 +59,14 @@ class ChatTextFormField extends StatelessWidget {
 class MessagesTextField extends StatefulWidget {
   final TextEditingController controller;
   final void Function() onSend;
+  final void Function() record;
+  final void Function() finishRecording;
   const MessagesTextField({
     super.key,
     required this.controller,
     required this.onSend,
+    required this.record,
+    required this.finishRecording,
   });
 
   @override
@@ -134,14 +138,15 @@ class _MessagesTextFieldState extends State<MessagesTextField> {
             ),
           ),
           const SizedBox(width: 5.0),
-          CircleAvatar(
-            radius: 25.0,
-            backgroundColor: AppColors.lightThemePrimaryColor,
-            child: IconButton(
-              splashRadius: 25.0,
-              onPressed: widget.onSend,
-              icon: const Icon(
-                Icons.send,
+          GestureDetector(
+            onTap: widget.onSend,
+            onLongPress: widget.record,
+            onLongPressCancel: widget.finishRecording,
+            child: CircleAvatar(
+              radius: 25.0,
+              backgroundColor: AppColors.lightThemePrimaryColor,
+              child: Icon(
+                widget.controller.text.isEmpty ? Icons.mic : Icons.send,
                 color: AppColors.whiteBackgroundColor,
               ),
             ),

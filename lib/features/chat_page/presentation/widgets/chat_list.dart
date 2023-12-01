@@ -26,27 +26,32 @@ class ChatList extends StatelessWidget {
                 state is GetAllUsersErrorState) {
               return const ConnectionErrorPage();
             } else {
-              return ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemBuilder: (context, index) => _chatListItem(
-                  context: context,
-                  user: SplashScreenCubit.allUsers![index],
-                  focusColor: BlocProvider.of<ChatPageCubit>(context)
-                      .chatBackgroundColor[index],
-                  onLongPress: () =>
-                      BlocProvider.of<ChatPageCubit>(context).selectedChat(
-                    index,
-                    SplashScreenCubit.allUsers![index],
-                  ),
-                  onTapDuringLongPress: () =>
-                      BlocProvider.of<ChatPageCubit>(context)
-                          .removeSelectedChat(
-                    index,
-                    SplashScreenCubit.allUsers![index],
-                  ),
-                ),
-                itemCount: SplashScreenCubit.allUsers!.length,
+              return StreamBuilder<List<Chat>>(
+                stream: BlocProvider.of<ChatPageCubit>(context).getAllChatMessages(context),
+                builder: (context, snapshot) {
+                  return ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemBuilder: (context, index) => _chatListItem(
+                      context: context,
+                      user: SplashScreenCubit.allUsers![index],
+                      focusColor: BlocProvider.of<ChatPageCubit>(context)
+                          .chatBackgroundColor[index],
+                      onLongPress: () =>
+                          BlocProvider.of<ChatPageCubit>(context).selectedChat(
+                        index,
+                        SplashScreenCubit.allUsers![index],
+                      ),
+                      onTapDuringLongPress: () =>
+                          BlocProvider.of<ChatPageCubit>(context)
+                              .removeSelectedChat(
+                        index,
+                        SplashScreenCubit.allUsers![index],
+                      ),
+                    ),
+                    itemCount: SplashScreenCubit.allUsers!.length,
+                  );
+                }
               );
             }
           },

@@ -1,7 +1,7 @@
-import 'package:chat_app/core/widgets/text_form_field.dart';
 import 'package:chat_app/features/chat_page/domain/entities/chat.dart';
 import 'package:chat_app/features/chat_page/presentation/cubit/chat_page_cubit.dart';
 import 'package:chat_app/features/chat_page/presentation/widgets/chat_bubble.dart';
+import 'package:chat_app/features/chat_page/presentation/widgets/type_message.dart';
 import 'package:chat_app/features/registration/domain/entities/user.dart';
 import 'package:chat_app/features/splash_screen/presentation/cubit/splash_screen_cubit.dart';
 import 'package:flutter/material.dart';
@@ -45,16 +45,16 @@ class IntoChat extends StatelessWidget {
         ],
       ),
       body: _buildBody(context),
-      bottomSheet: _typeMessage(context),
+      bottomSheet: TypeMessage(otherUser: otherUser),
     );
   }
 
   Widget _buildBody(context) => BlocBuilder<ChatPageCubit, ChatPageState>(
         builder: (context, state) {
-          BlocProvider.of<ChatPageCubit>(context).getChat(
-            context: context,
-            receiverId: otherUser.id,
-          );
+          // BlocProvider.of<ChatPageCubit>(context).getChat(
+          //   context: context,
+          //   receiverId: otherUser.id,
+          // );
           return StreamBuilder<List<Chat>>(
             stream: BlocProvider.of<ChatPageCubit>(context).getChat(
               context: context,
@@ -71,10 +71,7 @@ class IntoChat extends StatelessWidget {
               return ListView(
                 padding: const EdgeInsets.only(bottom: 70),
                 children: data.map<Widget>((chat) {
-                  if (SplashScreenCubit
-                          .userModel!
-                          .id ==
-                      chat.senderId) {
+                  if (SplashScreenCubit.userModel!.id == chat.senderId) {
                     return UserBubbleChat(
                       message: chat.message,
                       dateTime: chat.dateTime,
@@ -90,13 +87,5 @@ class IntoChat extends StatelessWidget {
             },
           );
         },
-      );
-
-  Widget _typeMessage(context) => MessagesTextField(
-        controller: BlocProvider.of<ChatPageCubit>(context).messageController,
-        onSend: () => BlocProvider.of<ChatPageCubit>(context).sendChat(
-          context: context,
-          receiverId: otherUser.id,
-        ),
       );
 }

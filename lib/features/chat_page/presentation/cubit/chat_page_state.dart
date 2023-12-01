@@ -64,3 +64,30 @@ class SelectedChatState extends ChatPageState {
   @override
   List<Object> get props => [list];
 }
+
+class OnPlayerStateChanged extends ChatPageState {
+  final PlayerState playerState;
+
+  const OnPlayerStateChanged({required this.playerState});
+
+  @override
+  List<Object> get props => [playerState];
+}
+
+class OnDurationChanged extends ChatPageState {
+  final Duration duration;
+
+  const OnDurationChanged({required this.duration});
+
+  @override
+  List<Object> get props => [duration];
+}
+
+class OnPositionChanged extends ChatPageState {
+  final Duration position;
+
+  const OnPositionChanged({required this.position});
+
+  @override
+  List<Object> get props => [position];
+}
