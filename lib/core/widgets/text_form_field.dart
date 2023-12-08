@@ -7,6 +7,7 @@ class ChatTextFormField extends StatelessWidget {
   final TextEditingController controller;
   final String? Function(String?) validator;
   final Function(String)? onChanged;
+  final Function(String)? onFieldSubmitted;
   final TextInputType? keyboardType;
   final IconButton? suffix;
   final bool? obscure;
@@ -18,6 +19,7 @@ class ChatTextFormField extends StatelessWidget {
     required this.controller,
     required this.validator,
     this.onChanged,
+    this.onFieldSubmitted,
     this.keyboardType = TextInputType.name,
     this.suffix,
     this.obscure = false,
@@ -37,6 +39,7 @@ class ChatTextFormField extends StatelessWidget {
         keyboardType: keyboardType,
         validator: validator,
         onChanged: onChanged,
+        onFieldSubmitted: onFieldSubmitted,
         autovalidateMode: AutovalidateMode.onUserInteraction,
         textAlign: maxLength == 1 ? TextAlign.center : TextAlign.left,
         decoration: InputDecoration(

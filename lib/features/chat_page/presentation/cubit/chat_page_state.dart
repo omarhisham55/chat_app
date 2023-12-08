@@ -4,7 +4,7 @@ abstract class ChatPageState extends Equatable {
   const ChatPageState();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class ChatPageInitial extends ChatPageState {}
@@ -26,11 +26,12 @@ class SendChatFailed extends ChatPageState {
 }
 
 class GetChatSuccess extends ChatPageState {
-  final int msg;
-  const GetChatSuccess(this.msg);
+  final int? msgL;
+  final String? msg;
+  const GetChatSuccess({this.msgL, this.msg});
 
   @override
-  List<Object> get props => [msg];
+  List<Object?> get props => [msgL ?? msg];
 }
 
 class GetChatFailed extends ChatPageState {

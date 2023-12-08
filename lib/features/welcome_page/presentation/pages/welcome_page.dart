@@ -1,4 +1,5 @@
 import 'package:chat_app/config/routes/routes.dart';
+import 'package:chat_app/core/utils/images.dart';
 import 'package:chat_app/core/widgets/buttons.dart';
 import 'package:flutter/material.dart';
 
@@ -24,7 +25,10 @@ class WelcomePage extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 150.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Image.asset(AppImages.logo),
+            const SizedBox(height: 20),
             Text(
               "Welcome to Chat",
               style: Theme.of(_).textTheme.displayMedium,

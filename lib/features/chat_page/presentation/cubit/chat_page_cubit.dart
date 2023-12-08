@@ -3,7 +3,6 @@ import 'package:chat_app/features/chat_page/domain/entities/chat.dart';
 import 'package:chat_app/features/chat_page/domain/usecases/chat_message_usecase.dart';
 import 'package:chat_app/features/registration/domain/entities/user.dart';
 import 'package:chat_app/features/splash_screen/presentation/cubit/splash_screen_cubit.dart';
-import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,7 +12,6 @@ class ChatPageCubit extends Cubit<ChatPageState> {
   final SendChatMessagesUseCase chatMessagesUseCase;
   final GetChatMessagesUseCase getChatMessagesUseCase;
   final AddToArchiveUsecase addToArchiveUsecase;
-  List<Chat> messages = [];
   ChatPageCubit({
     required this.chatMessagesUseCase,
     required this.getChatMessagesUseCase,
@@ -43,7 +41,16 @@ class ChatPageCubit extends Cubit<ChatPageState> {
     }
   }
 
-  Stream<List<Chat>> getChat({
+  late Map<String, Map<String, dynamic>> messages = {
+    for (var key in SplashScreenCubit.allUsers!)
+      key.id: {
+        "allMessages": <Chat>[],
+        "lastMessageText": "",
+        "lastMessageDate": "",
+      }
+  };
+
+  Stream<dynamic> getChat({
     required BuildContext context,
     required String receiverId,
   }) async* {
@@ -56,28 +63,38 @@ class ChatPageCubit extends Cubit<ChatPageState> {
         (l) => const GetChatFailed(),
         (r) {
           r.forEach((e) {
-            messages = e;
+            messages[receiverId]!["allMessages"] = e;
           });
-          return GetChatSuccess(DateTime.now().millisecond);
+          return GetChatSuccess(
+            msg: messages[receiverId]!["allMessages"].isEmpty
+                ? ""
+                : messages[receiverId]!["allMessages"].last.message,
+          );
         },
       ),
     );
-    yield messages;
+    yield messages[receiverId]!["allMessages"];
   }
 
-  List<Chat> lastMessages = [];
-  Stream<List<Chat>> getAllChatMessages(context) {
-    Future.delayed(const Duration(seconds: 2));
-    for (int i = 0; i < SplashScreenCubit.allUsers!.length - 1; i++) {
-      getChat(
-        context: context,
-        receiverId: SplashScreenCubit.allUsers![i].id,
-      ).last.then((value) => lastMessages.add(value.last));
-      print('sha8al $i');
-      print(lastMessages);
+  Future getAllChatMessages(context) async {
+    try {
+      final List<User> users = SplashScreenCubit.allUsers!;
+      for (var userId in users) {
+        await getChat(
+          context: context,
+          receiverId: userId.id,
+        ).last.then((value) {
+          if (value.last.receiverId == userId.id ||
+              value.last.senderId == userId.id) {
+            messages[userId.id]!["lastMessageText"] = value.last.message;
+            messages[userId.id]!["lastMessageDate"] = value.last.dateTime;
+          }
+        });
+        emit(GetChatSuccess(msg: messages[userId.id]!["lastMessageText"]));
+      }
+    } catch (error) {
+      return Future.error(error);
     }
-    emit(GetChatSuccess(DateTime.now().millisecond));
-    return Stream.value(lastMessages);
   }
 
   List<User> selectedChatList = [];

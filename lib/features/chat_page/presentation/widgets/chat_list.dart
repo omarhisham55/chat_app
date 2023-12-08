@@ -15,55 +15,69 @@ class ChatList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ChatPageCubit, ChatPageState>(
-      builder: (context, state) {
-        return ConditionalBuilder(
-          condition: state is! LoadingGetSavedUserState ||
-              state is! LoadingGetAllUsersState ||
-              SplashScreenCubit.allUsers != null,
-          builder: (context) {
-            if (state is GetSavedUserErrorState ||
-                state is GetAllUsersErrorState) {
-              return const ConnectionErrorPage();
-            } else {
-              return StreamBuilder<List<Chat>>(
-                stream: BlocProvider.of<ChatPageCubit>(context).getAllChatMessages(context),
-                builder: (context, snapshot) {
-                  return ListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemBuilder: (context, index) => _chatListItem(
-                      context: context,
-                      user: SplashScreenCubit.allUsers![index],
-                      focusColor: BlocProvider.of<ChatPageCubit>(context)
-                          .chatBackgroundColor[index],
-                      onLongPress: () =>
-                          BlocProvider.of<ChatPageCubit>(context).selectedChat(
-                        index,
-                        SplashScreenCubit.allUsers![index],
-                      ),
-                      onTapDuringLongPress: () =>
-                          BlocProvider.of<ChatPageCubit>(context)
-                              .removeSelectedChat(
-                        index,
-                        SplashScreenCubit.allUsers![index],
-                      ),
+    return BlocBuilder<SplashScreenCubit, SplashScreenState>(
+        builder: (context, splashState) {
+      return BlocBuilder<ChatPageCubit, ChatPageState>(
+        builder: (context, state) {
+          return ConditionalBuilder(
+            condition: splashState is! LoadingGetSavedUserState ||
+                splashState is! LoadingGetAllUsersState ||
+                SplashScreenCubit.allUsers != null,
+            builder: (context) {
+              if (splashState is GetSavedUserErrorState ||
+                  splashState is GetAllUsersErrorState) {
+                return const ConnectionErrorPage();
+              } else {
+                return StreamBuilder(
+                    stream: Stream.fromFuture(
+                      BlocProvider.of<ChatPageCubit>(context)
+                          .getAllChatMessages(context),
                     ),
-                    itemCount: SplashScreenCubit.allUsers!.length,
-                  );
-                }
-              );
-            }
-          },
-          fallback: (context) => const LoadingIndicator(),
-        );
-      },
-    );
+                    builder: (context, snapshot) {
+                      final List<User> users = SplashScreenCubit.allUsers ?? [];
+                      return ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemBuilder: (context, index) => _chatListItem(
+                          context: context,
+                          user: users[index],
+                          lastMessage: [
+                            BlocProvider.of<ChatPageCubit>(context)
+                                .messages[users[index].id]!["lastMessageText"],
+                            BlocProvider.of<ChatPageCubit>(context)
+                                .messages[users[index].id]!["lastMessageDate"]
+                          ],
+                          focusColor: BlocProvider.of<ChatPageCubit>(context)
+                              .chatBackgroundColor[index],
+                          onLongPress: () =>
+                              BlocProvider.of<ChatPageCubit>(context)
+                                  .selectedChat(
+                            index,
+                            users[index],
+                          ),
+                          onTapDuringLongPress: () =>
+                              BlocProvider.of<ChatPageCubit>(context)
+                                  .removeSelectedChat(
+                            index,
+                            users[index],
+                          ),
+                        ),
+                        itemCount: users.length,
+                      );
+                    });
+              }
+            },
+            fallback: (context) => const LoadingIndicator(),
+          );
+        },
+      );
+    });
   }
 
   Widget _chatListItem({
     required BuildContext context,
     required User user,
+    required List<String?>? lastMessage,
     required bool focusColor,
     required Function() onLongPress,
     required Function onTapDuringLongPress,
@@ -91,12 +105,6 @@ class ChatList extends StatelessWidget {
             padding: const EdgeInsets.all(10.0),
             child: BlocBuilder<ChatPageCubit, ChatPageState>(
                 builder: (context, state) {
-              final List<Chat> messages =
-                  BlocProvider.of<ChatPageCubit>(context).messages;
-              final String finalMessage =
-                  messages.isNotEmpty ? messages.last.message : "";
-              final String finalDateTime =
-                  messages.isNotEmpty ? messages.last.dateTime : "";
               return Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -141,7 +149,7 @@ class ChatList extends StatelessWidget {
                           ),
                           const SizedBox(height: 5),
                           Text(
-                            finalMessage,
+                            lastMessage?[0] ?? "",
                             style: Theme.of(context)
                                 .textTheme
                                 .titleSmall!
@@ -157,7 +165,7 @@ class ChatList extends StatelessWidget {
                   Column(
                     children: [
                       Text(
-                        finalDateTime,
+                        lastMessage?[1] ?? "",
                         style: Theme.of(context)
                             .textTheme
                             .titleSmall!

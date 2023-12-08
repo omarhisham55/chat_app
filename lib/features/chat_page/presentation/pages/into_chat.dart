@@ -55,7 +55,7 @@ class IntoChat extends StatelessWidget {
           //   context: context,
           //   receiverId: otherUser.id,
           // );
-          return StreamBuilder<List<Chat>>(
+          return StreamBuilder<dynamic>(
             stream: BlocProvider.of<ChatPageCubit>(context).getChat(
               context: context,
               receiverId: otherUser.id,

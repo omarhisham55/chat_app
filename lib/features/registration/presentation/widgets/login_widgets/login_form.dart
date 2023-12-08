@@ -45,6 +45,14 @@ class LoginForm extends StatelessWidget {
                   }
                   return null;
                 },
+                onFieldSubmitted: (value) =>
+                    BlocProvider.of<LoginCubit>(context)
+                            .formKey
+                            .currentState!
+                            .validate()
+                        ? BlocProvider.of<LoginCubit>(context)
+                            .userLogin(context)
+                        : null,
               ),
             ],
           ),

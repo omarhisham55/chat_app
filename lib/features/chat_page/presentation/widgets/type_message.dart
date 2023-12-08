@@ -30,26 +30,6 @@ class _TypeMessageState extends State<TypeMessage> {
   @override
   void initState() {
     super.initState();
-    checkPermission();
-    audioPlayer.onPlayerStateChanged.listen((event) {
-      if (event == PlayerState.completed) {
-        isPlaying = false;
-        position = Duration.zero;
-      }
-      isPlaying = event == PlayerState.playing;
-      setState(() {});
-    });
-
-    audioPlayer.onDurationChanged.listen((event) {
-      duration = event;
-      position = Duration.zero;
-      setState(() {});
-    });
-
-    audioPlayer.onPositionChanged.listen((event) {
-      position = event;
-      setState(() {});
-    });
   }
 
   @override
@@ -70,6 +50,28 @@ class _TypeMessageState extends State<TypeMessage> {
     recorder.setSubscriptionDuration(
       const Duration(milliseconds: 500),
     );
+  }
+
+  void audioListener() {
+    audioPlayer.onPlayerStateChanged.listen((event) {
+      if (event == PlayerState.completed) {
+        isPlaying = false;
+        position = Duration.zero;
+      }
+      isPlaying = event == PlayerState.playing;
+      setState(() {});
+    });
+
+    audioPlayer.onDurationChanged.listen((event) {
+      duration = event;
+      position = Duration.zero;
+      setState(() {});
+    });
+
+    audioPlayer.onPositionChanged.listen((event) {
+      position = event;
+      setState(() {});
+    });
   }
 
   Future record() async {
@@ -112,8 +114,12 @@ class _TypeMessageState extends State<TypeMessage> {
             context: context,
             receiverId: widget.otherUser.id,
           ),
-          record: () => record(),
-          finishRecording: () => stop(),
+          record: () {
+            checkPermission();
+            audioListener();
+            record();
+          },
+          finishRecording: () => isPlaying ? stop() : null,
         );
       },
     );
