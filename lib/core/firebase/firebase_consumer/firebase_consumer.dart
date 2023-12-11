@@ -42,7 +42,7 @@ class FirebaseAuthConsumer implements FirebaseAuthentication {
       );
       return response;
     } on FirebaseAuthException catch (error) {
-      return Future.error(_handleFirebaseException(error: error));
+      return Future.error(_handleFirebaseAuthException(error));
     }
   }
 
@@ -68,7 +68,7 @@ class FirebaseAuthConsumer implements FirebaseAuthentication {
           email: email, password: password);
       return getLoggedInUser(user.user!.uid);
     } on FirebaseAuthException catch (error) {
-      return Future.error(_handleFirebaseException(error: error));
+      return Future.error(_handleFirebaseAuthException(error));
     }
   }
 
@@ -83,7 +83,7 @@ class FirebaseAuthConsumer implements FirebaseAuthentication {
           await client.signInWithCredential(phoneAuthCredential);
         },
         verificationFailed: (FirebaseAuthException error) {
-          _handleFirebaseException(error: error);
+          _handleFirebaseAuthException(error);
           debugPrint("zaza ${error.code}");
         },
         codeSent: (String verificationId, int? forceResendingToken) async {
@@ -93,7 +93,7 @@ class FirebaseAuthConsumer implements FirebaseAuthentication {
       );
       return true;
     } on FirebaseAuthException catch (error) {
-      _handleFirebaseException(error: error);
+      _handleFirebaseAuthException(error);
       debugPrint("hamo ${error.code}");
       return false;
     }
@@ -120,13 +120,29 @@ class FirebaseAuthConsumer implements FirebaseAuthentication {
     try {
       return await firebsaeData.collection("users").get();
     } on FirebaseException catch (error) {
-      return Future.error(_handleFirebaseException(e: error));
+      return Future.error(_handleFirebaseException(error));
     }
   }
 
-  static dynamic _handleFirebaseException(
-      {FirebaseAuthException? error, FirebaseException? e}) {
-    switch (error!.code) {
+  static dynamic _handleFirebaseException(FirebaseException error) {
+    switch (error.code) {
+      case "UNAVAILABLE":
+        Constants.showToast(
+          msg: const ConnectionError().msg!,
+          color: Colors.red,
+        );
+        throw const ConnectionError();
+      case "permission-denied":
+        Constants.showToast(
+          msg: const PermissionDenied().msg!,
+          color: Colors.red,
+        );
+        throw const PermissionDenied();
+    }
+  }
+
+  static dynamic _handleFirebaseAuthException(FirebaseAuthException error) {
+    switch (error.code) {
       case "INVALID_LOGIN_CREDENTIALS":
         Constants.showToast(
           msg: const InvalidLoginCredentials().msg!,
@@ -173,14 +189,6 @@ class FirebaseAuthConsumer implements FirebaseAuthentication {
           color: Colors.red,
         );
         throw const UnknownError();
-    }
-    switch (e!.code) {
-      case "UNAVAILABLE":
-        Constants.showToast(
-          msg: const ConnectionError().msg!,
-          color: Colors.red,
-        );
-        throw const ConnectionError();
     }
   }
 }
@@ -244,7 +252,7 @@ class FirebaseConsumer implements FirebaseMessaging {
                 .toList(),
           );
     } on FirebaseException catch (error) {
-      return FirebaseAuthConsumer._handleFirebaseException(e: error);
+      return FirebaseAuthConsumer._handleFirebaseException(error);
     }
   }
 

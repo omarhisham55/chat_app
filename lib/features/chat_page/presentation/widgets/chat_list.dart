@@ -2,7 +2,6 @@ import 'package:chat_app/config/routes/routes.dart';
 import 'package:chat_app/core/utils/colors.dart';
 import 'package:chat_app/core/widgets/connection_error_page.dart';
 import 'package:chat_app/core/widgets/indicator.dart';
-import 'package:chat_app/features/chat_page/domain/entities/chat.dart';
 import 'package:chat_app/features/chat_page/presentation/cubit/chat_page_cubit.dart';
 import 'package:chat_app/features/registration/domain/entities/user.dart';
 import 'package:chat_app/features/splash_screen/presentation/cubit/splash_screen_cubit.dart';

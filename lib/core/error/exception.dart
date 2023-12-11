@@ -47,3 +47,7 @@ class UnknownError extends ServerException {
 class ConnectionError extends ServerException {
   const ConnectionError([msg]) : super("Connection error");
 }
+
+class PermissionDenied extends ServerException {
+  const PermissionDenied([msg]) : super("Permission denied");
+}

@@ -37,7 +37,7 @@ class GetUserDatasourceImpl implements GetUserDatasource {
   }
 
   @override
-  Future<User?>? getCachedUser() async {
+  Future<User?> getCachedUser() async {
     final String? response = sharedPreferences.containsKey("userId")
         ? sharedPreferences.getString("userId")
         : null;
